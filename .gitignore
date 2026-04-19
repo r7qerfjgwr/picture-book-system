@@ -1,0 +1,33 @@
+# Node
+node_modules/
+dist/
+.vite/
+
+# Java
+backend/target/
+backend/.idea/
+*.class
+*.jar
+*.war
+*.log
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Environment
+.env
+.env.local
+*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Claude
+.claude/
