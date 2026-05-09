@@ -64,4 +64,14 @@ public interface StatsService {
      * 获取操作日志列表
      */
     Map<String, Object> getOperationLogs(Integer current, Integer size);
+
+    /**
+     * 获取儿童分析概览数据
+     */
+    Map<String, Object> getChildrenAnalysis();
+
+    /**
+     * 获取儿童排行榜
+     */
+    List<Map<String, Object>> getChildrenRanking(String type, Integer limit);
 }

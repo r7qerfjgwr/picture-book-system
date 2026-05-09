@@ -40,9 +40,9 @@ mysql -u root -p picture_book_system < sql/incremental_schema.sql
 
 | 角色 | 用户名 | 密码 |
 |------|--------|------|
-| 管理员 | admin | admin123 |
-| 教师 | teacher | teacher123 |
-| 家长 | parent | parent123 |
+| 管理员 | admin | 123456 |
+| 教师 | teacher | 123456 |
+| 家长 | parent | 123456 |
 
 ## 架构说明
 
@@ -99,7 +99,37 @@ mysql -u root -p picture_book_system < sql/incremental_schema.sql
 - 主键使用自增 `Long` 类型
 - 数据库使用 snake_case，Java 实体使用 camelCase
 - MyBatis-Plus 自动处理映射
-- 核心表：`user`, `child`, `book`, `reading_log`, `behavior_analysis`, `growth_report`, `recommendation`, `reading_bookmark`, `reading_annotation`
+- 核心表：`user`, `child`, `book`, `reading_log`, `behavior_analysis`, `growth_report`, `recommendation`, `reading_bookmark`, `reading_annotation`, `notification`
+
+## 新增功能
+
+### 儿童分析概览 (管理员专属)
+- 路径: `/app/children-analysis`
+- 前端: `frontend/src/views/children-analysis/index.vue`
+- 后端接口: `/stats/children-analysis`, `/stats/children-ranking`
+- 功能: 阅读类型分布饼图、专注度分布柱状图、能力评估堆叠图、阅读排行榜
+
+### 通知系统
+- 实体: `Notification.java`
+- 服务: `NotificationService.java`
+- 前端: `frontend/src/views/notification/`
+
+## 项目相关文件
+
+| 文件 | 说明 |
+|------|------|
+| `我的毕业设计.-2026版-带截图.doc` | 论文文档 (含系统截图) |
+| `我的毕业设计.-2026版-带图表.doc` | 论文文档 (含流程图) |
+| `screenshots/` | 系统截图目录 |
+| `thesis_diagrams/` | 论文图表目录 (.drawio + .spec.yaml) |
+
+## 已安装的 Skills
+
+| Skill | 位置 | 用途 |
+|-------|------|------|
+| drawio | 用户级 | 生成流程图、架构图 |
+| drawio-academic-skills | 用户级 | 学术论文图表 |
+| grad-skill | 项目级 | 毕业论文写作规范 |
 
 ## 开发注意事项
 
@@ -107,3 +137,4 @@ mysql -u root -p picture_book_system < sql/incremental_schema.sql
 2. **端口冲突**: 前端开发服务器会自动递增端口 (3000 → 3001 → 3002...)
 3. **API 认证**: 大部分接口需要 JWT token，公开接口在 `SecurityConfig` 中配置
 4. **跨域**: 后端已配置 CORS 允许前端来源
+5. **图表编辑**: 使用 draw.io 网页版 (https://app.diagrams.net) 打开 `thesis_diagrams/*.drawio` 文件

@@ -95,4 +95,18 @@ public class StatsController {
             @RequestParam(defaultValue = "10") Integer size) {
         return Result.success(statsService.getOperationLogs(current, size));
     }
+
+    @Operation(summary = "获取儿童分析概览数据")
+    @GetMapping("/children-analysis")
+    public Result<Map<String, Object>> getChildrenAnalysis() {
+        return Result.success(statsService.getChildrenAnalysis());
+    }
+
+    @Operation(summary = "获取儿童排行榜")
+    @GetMapping("/children-ranking")
+    public Result<List<Map<String, Object>>> getChildrenRanking(
+            @RequestParam(defaultValue = "readingTime") String type,
+            @RequestParam(defaultValue = "10") Integer limit) {
+        return Result.success(statsService.getChildrenRanking(type, limit));
+    }
 }

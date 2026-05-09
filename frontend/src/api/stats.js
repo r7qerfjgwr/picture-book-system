@@ -124,3 +124,24 @@ export function getOperationLogs(current = 1, size = 10) {
     params: { current, size }
   })
 }
+
+/**
+ * 获取儿童分析概览数据
+ */
+export function getChildrenAnalysis() {
+  return request({
+    url: '/stats/children-analysis',
+    method: 'get'
+  })
+}
+
+/**
+ * 获取儿童排行榜
+ */
+export function getChildrenRanking(type = 'readingTime', limit = 10) {
+  return request({
+    url: '/stats/children-ranking',
+    method: 'get',
+    params: { type, limit }
+  })
+}

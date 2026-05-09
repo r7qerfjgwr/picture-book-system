@@ -24,16 +24,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<SysUser> getUserList(PageDTO dto) {
         Page<SysUser> page = new Page<>(dto.getCurrent(), dto.getSize());
-        LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
-        if (StringUtils.hasText(dto.getKeyword())) {
-            wrapper.like(SysUser::getUsername, dto.getKeyword())
-                   .or().like(SysUser::getRealName, dto.getKeyword());
-        }
-        if (dto.getParentId() != null) {
-            wrapper.eq(SysUser::getRoleId, dto.getParentId());
-        }
-        wrapper.orderByDesc(SysUser::getCreateTime);
-        return userMapper.selectPage(page, wrapper);
+        return userMapper.selectUserPageWithRole(page, dto.getUsername(), dto.getRole());
     }
     
     @Override

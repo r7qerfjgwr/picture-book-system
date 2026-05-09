@@ -92,6 +92,18 @@ const routes = [
         meta: { title: '用户管理', roles: ['ADMIN'] }
       },
       {
+        path: 'notification',
+        name: 'Notification',
+        component: () => import('@/views/notification/index.vue'),
+        meta: { title: '通知发送', roles: ['ADMIN'] }
+      },
+      {
+        path: 'children-analysis',
+        name: 'ChildrenAnalysis',
+        component: () => import('@/views/children-analysis/index.vue'),
+        meta: { title: '儿童分析概览', roles: ['ADMIN'] }
+      },
+      {
         path: 'profile',
         name: 'Profile',
         component: () => import('@/views/profile/index.vue'),

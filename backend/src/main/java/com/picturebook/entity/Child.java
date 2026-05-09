@@ -56,4 +56,7 @@ public class Child implements Serializable {
 
     @TableField(exist = false)
     private Integer age;
+
+    @TableField(exist = false)
+    private Integer readCount;
 }

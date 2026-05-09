@@ -36,7 +36,7 @@
         <el-table-column prop="phone" label="手机号" />
         <el-table-column prop="role" label="角色" width="100">
           <template #default="{ row }">
-            <el-tag :type="getRoleType(row.role)">{{ getRoleLabel(row.role) }}</el-tag>
+            <el-tag :type="getRoleType(row.role?.roleKey || row.roleId)">{{ getRoleLabel(row.role?.roleKey || row.roleId) }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="status" label="状态" width="100">
@@ -135,13 +135,27 @@ const rules = {
 }
 
 const getRoleType = (role) => {
-  const types = { ADMIN: 'danger', TEACHER: 'warning', PARENT: 'success' }
+  const types = {
+    'ADMIN': 'danger',
+    'TEACHER': 'warning',
+    'PARENT': 'success',
+    1: 'danger',      // roleId = 1 是管理员
+    2: 'warning',     // roleId = 2 是教师
+    3: 'success'      // roleId = 3 是家长
+  }
   return types[role] || 'info'
 }
 
 const getRoleLabel = (role) => {
-  const labels = { ADMIN: '管理员', TEACHER: '教师', PARENT: '家长' }
-  return labels[role] || role
+  const labels = {
+    'ADMIN': '管理员',
+    'TEACHER': '教师',
+    'PARENT': '家长',
+    1: '管理员',
+    2: '教师',
+    3: '家长'
+  }
+  return labels[role] || '未知'
 }
 
 const loadUsers = async () => {

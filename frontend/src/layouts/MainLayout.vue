@@ -90,6 +90,11 @@
           <template #title>用户管理</template>
         </el-menu-item>
 
+        <el-menu-item index="/app/children-analysis" v-if="userStore.isAdmin" class="menu-item">
+          <span class="menu-emoji">👶</span>
+          <template #title>儿童分析概览</template>
+        </el-menu-item>
+
         <el-menu-item index="/app/profile" class="menu-item">
           <span class="menu-emoji">👤</span>
           <template #title>个人中心</template>
@@ -179,7 +184,8 @@ const currentPageTitle = computed(() => {
     '/app/growth': '成长跟踪',
     '/app/recommendations': '绘本推荐',
     '/app/class': '班级管理',
-    '/app/users': '用户管理'
+    '/app/users': '用户管理',
+    '/app/children-analysis': '儿童分析概览'
   }
   return titles[route.path] || '绘本阅读系统'
 })

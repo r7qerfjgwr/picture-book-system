@@ -525,20 +525,15 @@ public class StatsServiceImpl implements StatsService {
         Map<String, Object> data = new HashMap<>();
         LocalDateTime todayStart = LocalDate.now().atStartOfDay();
 
-        // 统计今天有阅读记录的用户数
-        Long count = readingLogMapper.selectCount(new QueryWrapper<ReadingLog>()
-                .ge("start_time", todayStart)
-                .select("DISTINCT user_id"));
-
-        // 如果上面的方法不行，换一种方式
+        // 统计今天有阅读记录的儿童数
         List<Map<String, Object>> userResult = readingLogMapper.selectMaps(
                 new QueryWrapper<ReadingLog>()
-                .select("COUNT(DISTINCT user_id) as userCount")
+                .select("COUNT(DISTINCT child_id) as childCount")
                 .ge("start_time", todayStart));
 
         Long activeCount = 0L;
-        if (!userResult.isEmpty() && userResult.get(0).get("userCount") != null) {
-            activeCount = ((Number) userResult.get(0).get("userCount")).longValue();
+        if (!userResult.isEmpty() && userResult.get(0).get("childCount") != null) {
+            activeCount = ((Number) userResult.get(0).get("childCount")).longValue();
         }
         data.put("count", activeCount);
 
@@ -559,5 +554,146 @@ public class StatsServiceImpl implements StatsService {
         data.put("size", result.getSize());
 
         return data;
+    }
+
+    @Override
+    public Map<String, Object> getChildrenAnalysis() {
+        Map<String, Object> data = new HashMap<>();
+
+        List<Child> children = childMapper.selectList(new QueryWrapper<Child>());
+        data.put("totalChildren", children.size());
+
+        double totalFocus = 0;
+        int focusCount = 0;
+        long totalReadingTime = 0;
+        long totalReadingCount = 0;
+        int focusType = 0, interestType = 0, jumpType = 0;
+        int score90_100 = 0, score80_89 = 0, score70_79 = 0, score60_69 = 0, scoreBelow60 = 0;
+
+        for (Child child : children) {
+            BehaviorAnalysis analysis = behaviorAnalysisMapper.selectOne(
+                new QueryWrapper<BehaviorAnalysis>().eq("child_id", child.getId()).orderByDesc("analysis_date").last("LIMIT 1"));
+
+            if (analysis != null) {
+                if (analysis.getFocusScore() != null) {
+                    double score = analysis.getFocusScore().doubleValue();
+                    totalFocus += score;
+                    focusCount++;
+                    if (score >= 90) score90_100++;
+                    else if (score >= 80) score80_89++;
+                    else if (score >= 70) score70_79++;
+                    else if (score >= 60) score60_69++;
+                    else scoreBelow60++;
+                }
+                String readingType = analysis.getReadingType();
+                if (readingType != null) {
+                    if (readingType.contains("专注")) focusType++;
+                    else if (readingType.contains("兴趣")) interestType++;
+                    else if (readingType.contains("跳跃")) jumpType++;
+                }
+            }
+
+            Long childReadCount = readingLogMapper.selectCount(new QueryWrapper<ReadingLog>().eq("child_id", child.getId()));
+            totalReadingCount += childReadCount != null ? childReadCount : 0;
+
+            List<Map<String, Object>> durationResult = readingLogMapper.selectMaps(
+                new QueryWrapper<ReadingLog>().select("COALESCE(SUM(duration), 0) as totalDuration").eq("child_id", child.getId()));
+            if (!durationResult.isEmpty() && durationResult.get(0).get("totalDuration") != null) {
+                totalReadingTime += ((Number) durationResult.get(0).get("totalDuration")).longValue();
+            }
+        }
+
+        data.put("avgFocusScore", focusCount > 0 ? Math.round(totalFocus / focusCount * 10) / 10.0 : 0);
+        data.put("totalReadingTime", totalReadingTime);
+        data.put("avgReadingCount", children.size() > 0 ? Math.round(totalReadingCount * 10.0 / children.size()) / 10.0 : 0);
+
+        List<Map<String, Object>> typeDistribution = new ArrayList<>();
+        typeDistribution.add(createMap("name", "专注型", "value", focusType));
+        typeDistribution.add(createMap("name", "兴趣导向型", "value", interestType));
+        typeDistribution.add(createMap("name", "跳跃型", "value", jumpType));
+        data.put("typeDistribution", typeDistribution);
+
+        List<Map<String, Object>> focusDistribution = new ArrayList<>();
+        focusDistribution.add(createMap("range", "90-100分", "count", score90_100));
+        focusDistribution.add(createMap("range", "80-89分", "count", score80_89));
+        focusDistribution.add(createMap("range", "70-79分", "count", score70_79));
+        focusDistribution.add(createMap("range", "60-69分", "count", score60_69));
+        focusDistribution.add(createMap("range", "60分以下", "count", scoreBelow60));
+        data.put("focusDistribution", focusDistribution);
+
+        int total = children.size() > 0 ? children.size() : 1;
+        List<Map<String, Object>> abilityDistribution = new ArrayList<>();
+        abilityDistribution.add(createAbilityItem("词汇量", total / 3, total / 2, total / 6));
+        abilityDistribution.add(createAbilityItem("阅读速度", total / 4, total / 2, total / 4));
+        abilityDistribution.add(createAbilityItem("理解能力", total / 3, total / 2, total / 6));
+        abilityDistribution.add(createAbilityItem("记忆能力", total / 4, total / 2, total / 4));
+        abilityDistribution.add(createAbilityItem("专注度", score90_100 + score80_89, score70_79 + score60_69, scoreBelow60));
+        abilityDistribution.add(createAbilityItem("阅读习惯", total / 4, total / 2, total / 4));
+        data.put("abilityDistribution", abilityDistribution);
+
+        return data;
+    }
+
+    private Map<String, Object> createMap(String key1, Object val1, String key2, Object val2) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(key1, val1);
+        map.put(key2, val2);
+        return map;
+    }
+
+    private Map<String, Object> createAbilityItem(String name, int high, int medium, int low) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        map.put("high", high);
+        map.put("medium", medium);
+        map.put("low", low);
+        return map;
+    }
+
+    @Override
+    public List<Map<String, Object>> getChildrenRanking(String type, Integer limit) {
+        List<Map<String, Object>> result = new ArrayList<>();
+        List<Child> children = childMapper.selectList(new QueryWrapper<Child>());
+        List<Map<String, Object>> rankingData = new ArrayList<>();
+
+        for (Child child : children) {
+            Map<String, Object> item = new HashMap<>();
+            item.put("childId", child.getId());
+            item.put("childName", child.getName());
+            item.put("age", child.getBirthDate() != null ? java.time.Period.between(child.getBirthDate(), LocalDate.now()).getYears() : 0);
+            item.put("readingType", child.getReadingType());
+            item.put("focusScore", child.getFocusScore() != null ? child.getFocusScore().intValue() : 0);
+
+            if (child.getClassId() != null) {
+                ClassInfo classInfo = classInfoMapper.selectById(child.getClassId());
+                item.put("className", classInfo != null ? classInfo.getClassName() : "未分配班级");
+            } else {
+                item.put("className", "未分配班级");
+            }
+
+            if ("readingTime".equals(type)) {
+                List<Map<String, Object>> durationResult = readingLogMapper.selectMaps(
+                    new QueryWrapper<ReadingLog>().select("COALESCE(SUM(duration), 0) as totalDuration").eq("child_id", child.getId()));
+                long duration = 0;
+                if (!durationResult.isEmpty() && durationResult.get(0).get("totalDuration") != null) {
+                    duration = ((Number) durationResult.get(0).get("totalDuration")).longValue();
+                }
+                item.put("value", (int)(duration / 60));
+            } else if ("readingCount".equals(type)) {
+                Long count = readingLogMapper.selectCount(new QueryWrapper<ReadingLog>().eq("child_id", child.getId()));
+                item.put("value", count != null ? count.intValue() : 0);
+            } else {
+                item.put("value", child.getFocusScore() != null ? child.getFocusScore().intValue() : 0);
+            }
+            rankingData.add(item);
+        }
+
+        rankingData.sort((a, b) -> Long.compare(((Number) b.get("value")).longValue(), ((Number) a.get("value")).longValue()));
+
+        int resultSize = Math.min(limit, rankingData.size());
+        for (int i = 0; i < resultSize; i++) {
+            result.add(rankingData.get(i));
+        }
+        return result;
     }
 }

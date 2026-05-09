@@ -919,7 +919,12 @@ const saveReadingLog = async (isCompleted) => {
 
   try {
     const endTime = new Date()
-    const duration = Math.floor((endTime - startTime.value) / 1000)
+    // 确保 duration 不为负数，如果 startTime 为空或计算异常则使用 readingDuration
+    let duration = Math.floor((endTime - startTime.value) / 1000)
+    if (!startTime.value || duration < 0) {
+      duration = readingDuration.value || 0
+    }
+    duration = Math.max(0, duration)
 
     await createReadingLog({
       childId: child.value?.id,

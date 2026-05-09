@@ -79,7 +79,7 @@
         <div class="quick-stat-icon">🟢</div>
         <div class="quick-stat-info">
           <div class="quick-stat-value">{{ activeUsersToday }}</div>
-          <div class="quick-stat-label">今日活跃用户</div>
+          <div class="quick-stat-label">今日活跃儿童</div>
         </div>
       </div>
     </div>
@@ -146,19 +146,19 @@
         <span>快捷操作</span>
       </div>
       <div class="actions-grid">
-        <div class="action-btn" @click="$router.push('/users')">
+        <div class="action-btn" @click="$router.push('/app/users')">
           <span class="action-emoji">👤</span>
           <span class="action-text">用户管理</span>
         </div>
-        <div class="action-btn" @click="$router.push('/books')">
+        <div class="action-btn" @click="$router.push('/app/books')">
           <span class="action-emoji">📚</span>
           <span class="action-text">绘本管理</span>
         </div>
-        <div class="action-btn" @click="$router.push('/analysis')">
+        <div class="action-btn" @click="$router.push('/app/analysis')">
           <span class="action-emoji">📊</span>
           <span class="action-text">数据分析</span>
         </div>
-        <div class="action-btn" @click="$router.push('/class')">
+        <div class="action-btn" @click="$router.push('/app/class')">
           <span class="action-emoji">🏫</span>
           <span class="action-text">班级管理</span>
         </div>

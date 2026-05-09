@@ -46,7 +46,7 @@
         <div class="stat-icon">⏰</div>
         <div class="stat-content">
           <div class="stat-value">{{ Math.round(animatedStats.totalDuration / 60) }}</div>
-          <div class="stat-label">总阅读时长(小时)</div>
+          <div class="stat-label">总阅读时长(分钟)</div>
         </div>
       </div>
 

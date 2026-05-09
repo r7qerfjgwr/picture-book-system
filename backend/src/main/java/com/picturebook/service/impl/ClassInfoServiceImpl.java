@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.picturebook.dto.PageDTO;
 import com.picturebook.entity.Child;
 import com.picturebook.entity.ClassInfo;
+import com.picturebook.entity.ReadingLog;
 import com.picturebook.exception.BusinessException;
 import com.picturebook.mapper.ChildMapper;
 import com.picturebook.mapper.ClassInfoMapper;
+import com.picturebook.mapper.ReadingLogMapper;
 import com.picturebook.service.ClassInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,9 @@ public class ClassInfoServiceImpl implements ClassInfoService {
 
     @Autowired
     private ChildMapper childMapper;
+
+    @Autowired
+    private ReadingLogMapper readingLogMapper;
 
     @Override
     public Page<ClassInfo> getClassList(PageDTO dto) {
@@ -81,8 +86,19 @@ public class ClassInfoServiceImpl implements ClassInfoService {
 
     @Override
     public List<Child> getChildrenByClassId(Long classId) {
-        return childMapper.selectList(
+        List<Child> children = childMapper.selectList(
             new LambdaQueryWrapper<Child>().eq(Child::getClassId, classId)
         );
+
+        // 为每个儿童统计阅读次数
+        for (Child child : children) {
+            Long readCount = readingLogMapper.selectCount(
+                new LambdaQueryWrapper<ReadingLog>()
+                    .eq(ReadingLog::getChildId, child.getId())
+            );
+            child.setReadCount(readCount != null ? readCount.intValue() : 0);
+        }
+
+        return children;
     }
 }

@@ -36,7 +36,27 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     @Override
     public List<Recommendation> getRecommendations(Long childId) {
-        return recommendationMapper.selectRecommendationsWithBook(childId);
+        List<Recommendation> recommendations = recommendationMapper.selectList(
+                new LambdaQueryWrapper<Recommendation>()
+                        .eq(Recommendation::getChildId, childId)
+                        .orderByDesc(Recommendation::getRecommendScore)
+        );
+        // 如果没有推荐数据，自动生成
+        if (recommendations == null || recommendations.isEmpty()) {
+            generateRecommendations(childId);
+            recommendations = recommendationMapper.selectList(
+                    new LambdaQueryWrapper<Recommendation>()
+                            .eq(Recommendation::getChildId, childId)
+                            .orderByDesc(Recommendation::getRecommendScore)
+            );
+        }
+        // 填充 Book 信息
+        for (Recommendation rec : recommendations) {
+            if (rec.getBookId() != null) {
+                rec.setBook(bookMapper.selectById(rec.getBookId()));
+            }
+        }
+        return recommendations;
     }
 
     @Override

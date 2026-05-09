@@ -1,21 +1,28 @@
 <template>
   <div class="recommendations-page">
-    <!-- 页面标题 -->
-    <div class="page-header">
-      <h2>⭐ 绘本推荐</h2>
-      <p>为每个孩子智能推荐最适合的绘本</p>
+    <!-- 页面横幅 -->
+    <div class="page-banner">
+      <div class="banner-content">
+        <div class="banner-text">
+          <h1>绘本推荐</h1>
+          <p>智能推荐，让每个孩子找到最适合的绘本</p>
+        </div>
+        <div class="banner-icon">📚</div>
+      </div>
+      <div class="banner-deco"></div>
     </div>
 
     <!-- 儿童选择器 -->
-    <el-card class="selector-card" shadow="hover">
-      <div class="selector-content">
-        <div class="selector-left">
-          <span class="selector-label">选择儿童：</span>
+    <div class="selector-section">
+      <div class="selector-card">
+        <div class="selector-icon">👦</div>
+        <div class="selector-info">
+          <span class="selector-label">选择儿童</span>
           <el-select
             v-model="selectedChildId"
             placeholder="请选择儿童"
             @change="onChildChange"
-            style="width: 200px"
+            class="child-select"
           >
             <el-option
               v-for="child in childList"
@@ -25,63 +32,88 @@
             />
           </el-select>
         </div>
-        <el-button type="primary" @click="refreshRecommendations" :loading="loading">
-          刷新推荐
-        </el-button>
       </div>
-    </el-card>
+      <button class="refresh-btn" @click="refreshRecommendations" :disabled="loading">
+        <span v-if="loading" class="loading-spinner"></span>
+        <span v-else>🔄</span>
+        <span>刷新推荐</span>
+      </button>
+    </div>
 
     <!-- 推荐类型切换 -->
-    <div class="tabs-wrapper">
+    <div class="tabs-section">
       <div
         v-for="tab in tabs"
         :key="tab.key"
-        :class="['tab-item', { active: activeTab === tab.key }]"
+        :class="['tab-card', { active: activeTab === tab.key }]"
         @click="switchTab(tab.key)"
       >
-        <span class="tab-icon">{{ tab.icon }}</span>
-        <span class="tab-label">{{ tab.label }}</span>
+        <div class="tab-icon-wrapper" :class="tab.key">
+          <span class="tab-icon">{{ tab.icon }}</span>
+        </div>
+        <div class="tab-info">
+          <span class="tab-label">{{ tab.label }}</span>
+          <span class="tab-desc">{{ tab.desc }}</span>
+        </div>
       </div>
     </div>
 
     <!-- 加载状态 -->
-    <div v-if="loading" class="loading-wrapper">
-      <el-icon class="loading-icon"><Loading /></el-icon>
-      <span>正在加载推荐...</span>
+    <div v-if="loading" class="loading-section">
+      <div class="loading-animation">
+        <div class="book-loader">
+          <span>📖</span>
+        </div>
+        <p>正在寻找最适合的绘本...</p>
+      </div>
     </div>
 
     <!-- 推荐列表 -->
-    <div v-else class="books-grid">
-      <div
-        v-for="(item, index) in displayBooks"
-        :key="index"
-        class="book-card"
-        @click="viewBook(item)"
-      >
-        <div class="book-cover" :style="getCoverStyle(getBookCategory(item))">
-          <span class="cover-icon">{{ getBookEmoji(getBookCategory(item)) }}</span>
-        </div>
-        <div class="book-info">
-          <h3 class="book-title">{{ getBookTitle(item) }}</h3>
-          <p class="book-author">作者：{{ getBookAuthor(item) }}</p>
-          <el-tag size="small" type="info">{{ getBookCategory(item) }}</el-tag>
-          <div v-if="activeTab === 'multi' && item.score" class="match-score">
-            <span class="score-label">匹配度：</span>
-            <el-progress
-              :percentage="Number(item.score) || 0"
-              :stroke-width="6"
-              :show-text="true"
-            />
+    <div v-else-if="displayBooks.length > 0" class="books-section">
+      <div class="section-header">
+        <span class="section-icon">✨</span>
+        <span class="section-title">为你推荐</span>
+        <span class="book-count">共 {{ displayBooks.length }} 本</span>
+      </div>
+      <div class="books-grid">
+        <div
+          v-for="(item, index) in displayBooks"
+          :key="index"
+          class="book-card"
+          @click="viewBook(item)"
+        >
+          <div class="book-cover" :style="getCoverStyle(getBookCategory(item))">
+            <span class="cover-icon">{{ getBookEmoji(getBookCategory(item)) }}</span>
+          </div>
+          <div class="book-info">
+            <h3 class="book-title">{{ getBookTitle(item) }}</h3>
+            <p class="book-author">✍️ {{ getBookAuthor(item) }}</p>
+            <div class="book-tags">
+              <span class="tag category-tag">{{ getBookCategory(item) }}</span>
+              <span v-if="item.book?.ageRange" class="tag age-tag">{{ item.book.ageRange }}</span>
+            </div>
+            <div v-if="activeTab === 'multi' && item.score" class="match-score">
+              <div class="score-bar">
+                <div class="score-fill" :style="{ width: (item.score || 0) + '%' }"></div>
+              </div>
+              <span class="score-text">匹配度 {{ Math.round(item.score || 0) }}%</span>
+            </div>
+          </div>
+          <div class="book-action">
+            <span class="action-icon">👉</span>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- 空状态 -->
-      <div v-if="displayBooks.length === 0" class="empty-wrapper">
-        <el-empty description="暂无推荐数据">
-          <el-button type="primary" @click="refreshRecommendations">重新加载</el-button>
-        </el-empty>
-      </div>
+    <!-- 空状态 -->
+    <div v-else class="empty-section">
+      <div class="empty-icon">📭</div>
+      <h3>暂无推荐</h3>
+      <p>请先选择儿童，或点击刷新获取推荐</p>
+      <button class="retry-btn" @click="refreshRecommendations">
+        <span>🔄</span> 重新加载
+      </button>
     </div>
 
     <!-- 绘本详情弹窗 -->
@@ -161,7 +193,6 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { Loading } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import request from '@/utils/request'
 import { addBookmark, checkBookmark, removeBookmark } from '@/api/bookmark'
@@ -186,10 +217,10 @@ const ageBooks = ref([])
 
 // 标签配置
 const tabs = [
-  { key: 'hot', label: '热门绘本', icon: '🔥' },
-  { key: 'multi', label: '智能推荐', icon: '🤖' },
-  { key: 'difficulty', label: '难度匹配', icon: '📊' },
-  { key: 'age', label: '年龄适合', icon: '👶' }
+  { key: 'hot', label: '热门绘本', icon: '🔥', desc: '最受欢迎' },
+  { key: 'multi', label: '智能推荐', icon: '🤖', desc: '个性化' },
+  { key: 'difficulty', label: '难度匹配', icon: '📊', desc: '能力适配' },
+  { key: 'age', label: '年龄适合', icon: '👶', desc: '同龄最爱' }
 ]
 
 // 计算显示的书籍
@@ -267,11 +298,7 @@ const getDifficultyText = (level) => {
 const viewBook = async (item) => {
   selectedBook.value = item.book || item
   showBookDialog.value = true
-
-  // 设置弹窗中的儿童选择
   dialogChildId.value = selectedChildId.value
-
-  // 检查收藏状态
   await checkBookmarkStatus()
 }
 
@@ -380,7 +407,6 @@ const refreshRecommendations = async () => {
   loading.value = true
 
   try {
-    // 加载热门绘本（不需要选择儿童）
     const hotRes = await request({
       url: '/recommend/hot',
       method: 'get',
@@ -388,9 +414,7 @@ const refreshRecommendations = async () => {
     })
     hotBooks.value = hotRes.data || []
 
-    // 如果选择了儿童，加载个性化推荐
     if (selectedChildId.value) {
-      // 智能推荐
       const multiRes = await request({
         url: `/recommend/multi-strategy/${selectedChildId.value}`,
         method: 'get',
@@ -398,7 +422,6 @@ const refreshRecommendations = async () => {
       })
       multiBooks.value = multiRes.data || []
 
-      // 难度匹配
       const diffRes = await request({
         url: `/recommend/difficulty/${selectedChildId.value}`,
         method: 'get',
@@ -406,7 +429,6 @@ const refreshRecommendations = async () => {
       })
       difficultyBooks.value = diffRes.data || []
 
-      // 年龄适合
       const ageRes = await request({
         url: `/recommend/age-range/${selectedChildId.value}`,
         method: 'get',
@@ -430,136 +452,316 @@ onMounted(async () => {
 
 <style scoped>
 .recommendations-page {
-  padding: 24px;
-  background: #f5f7fa;
   min-height: calc(100vh - 100px);
+  background: linear-gradient(180deg, #fef9f3 0%, #fff5eb 100%);
+  padding: 24px;
 }
 
-.page-header {
+/* 页面横幅 */
+.page-banner {
+  background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%);
+  border-radius: 24px;
+  padding: 32px 40px;
   margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(255, 107, 107, 0.3);
 }
 
-.page-header h2 {
-  margin: 0 0 8px 0;
-  font-size: 24px;
-  color: #303133;
-}
-
-.page-header p {
-  margin: 0;
-  color: #909399;
-  font-size: 14px;
-}
-
-.selector-card {
-  margin-bottom: 20px;
-}
-
-.selector-content {
+.banner-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+  z-index: 1;
 }
 
-.selector-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.selector-label {
-  font-size: 14px;
-  color: #606266;
-  font-weight: 500;
-}
-
-/* 标签切换 */
-.tabs-wrapper {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 24px;
-  padding: 12px;
-  background: #fff;
-  border-radius: 8px;
-}
-
-.tab-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.3s;
-  background: #f5f7fa;
-}
-
-.tab-item:hover {
-  background: #e6f7ff;
-}
-
-.tab-item.active {
-  background: #409eff;
+.banner-text h1 {
+  margin: 0 0 8px 0;
+  font-size: 28px;
+  font-weight: 800;
   color: #fff;
 }
 
+.banner-text p {
+  margin: 0;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+.banner-icon {
+  font-size: 64px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(-5deg); }
+  50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+.banner-deco {
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 300px;
+  height: 300px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+}
+
+/* 选择器区域 */
+.selector-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.selector-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #fff;
+  padding: 16px 24px;
+  border-radius: 20px;
+  border: 3px solid #f0e6d3;
+  flex: 1;
+  max-width: 400px;
+}
+
+.selector-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.selector-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.selector-label {
+  font-size: 12px;
+  color: #a0937d;
+  font-weight: 600;
+}
+
+.child-select {
+  width: 180px;
+}
+
+.refresh-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  background: linear-gradient(135deg, #55efc4 0%, #00b894 100%);
+  border: none;
+  border-radius: 16px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0, 184, 148, 0.3);
+}
+
+.refresh-btn:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 184, 148, 0.4);
+}
+
+.refresh-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.loading-spinner {
+  width: 18px;
+  height: 18px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 标签切换 */
+.tabs-section {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.tab-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 3px solid #f0e6d3;
+}
+
+.tab-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(253, 203, 110, 0.25);
+  border-color: #fdcb6e;
+}
+
+.tab-card.active {
+  background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+  border-color: #f0b429;
+  box-shadow: 0 8px 24px rgba(253, 203, 110, 0.4);
+}
+
+.tab-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.tab-card.active .tab-icon-wrapper {
+  background: rgba(255, 255, 255, 0.8);
+}
+
 .tab-icon {
-  font-size: 16px;
+  font-size: 24px;
+}
+
+.tab-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .tab-label {
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #2d3436;
+}
+
+.tab-desc {
+  font-size: 12px;
+  color: #a0937d;
   font-weight: 500;
 }
 
 /* 加载状态 */
-.loading-wrapper {
+.loading-section {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  padding: 80px 20px;
+}
+
+.loading-animation {
+  text-align: center;
+}
+
+.book-loader {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+  border-radius: 20px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  padding: 60px;
-  color: #909399;
+  font-size: 40px;
+  margin: 0 auto 16px;
+  animation: bounce 1s ease-in-out infinite;
 }
 
-.loading-icon {
-  font-size: 32px;
-  margin-bottom: 12px;
-  animation: spin 1s linear infinite;
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
 }
 
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.loading-animation p {
+  font-size: 15px;
+  color: #a0937d;
+  font-weight: 500;
 }
 
-/* 书籍网格 */
+/* 书籍列表 */
+.books-section {
+  background: #fff;
+  border-radius: 24px;
+  padding: 24px;
+  border: 3px solid #f0e6d3;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 3px dashed #f0e6d3;
+}
+
+.section-icon {
+  font-size: 24px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #2d3436;
+}
+
+.book-count {
+  margin-left: auto;
+  font-size: 14px;
+  color: #a0937d;
+  font-weight: 600;
+}
+
 .books-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
 .book-card {
-  background: #fff;
-  border-radius: 12px;
+  background: linear-gradient(145deg, #fff 0%, #fef9f0 100%);
+  border-radius: 20px;
   padding: 20px;
   display: flex;
   gap: 16px;
-  transition: all 0.3s;
   cursor: pointer;
-  border: 1px solid #ebeef5;
+  transition: all 0.3s ease;
+  border: 3px solid #f0e6d3;
+  align-items: center;
 }
 
 .book-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  transform: translateY(-6px);
+  border-color: #fdcb6e;
+  box-shadow: 0 12px 32px rgba(253, 203, 110, 0.3);
 }
 
 .book-cover {
   width: 80px;
   height: 100px;
-  border-radius: 8px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -567,7 +769,7 @@ onMounted(async () => {
 }
 
 .cover-icon {
-  font-size: 32px;
+  font-size: 36px;
 }
 
 .book-info {
@@ -578,35 +780,135 @@ onMounted(async () => {
 .book-title {
   margin: 0 0 8px 0;
   font-size: 16px;
-  color: #303133;
+  font-weight: 700;
+  color: #2d3436;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .book-author {
-  margin: 0 0 8px 0;
+  margin: 0 0 10px 0;
   font-size: 13px;
-  color: #909399;
+  color: #a0937d;
+}
+
+.book-tags {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.tag {
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.category-tag {
+  background: #ffeaa7;
+  color: #e17055;
+}
+
+.age-tag {
+  background: #dfe6e9;
+  color: #636e72;
 }
 
 .match-score {
-  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.score-label {
+.score-bar {
+  flex: 1;
+  height: 8px;
+  background: #f0e6d3;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.score-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #55efc4 0%, #00b894 100%);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.score-text {
   font-size: 12px;
-  color: #606266;
-  display: block;
-  margin-bottom: 4px;
+  color: #00b894;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.book-action {
+  width: 36px;
+  height: 36px;
+  background: #ffeaa7;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.book-card:hover .book-action {
+  background: #fdcb6e;
+  transform: scale(1.1);
+}
+
+.action-icon {
+  font-size: 16px;
 }
 
 /* 空状态 */
-.empty-wrapper {
-  grid-column: 1 / -1;
-  padding: 60px;
+.empty-section {
+  text-align: center;
+  padding: 80px 20px;
   background: #fff;
-  border-radius: 12px;
+  border-radius: 24px;
+  border: 3px solid #f0e6d3;
+}
+
+.empty-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+
+.empty-section h3 {
+  margin: 0 0 8px 0;
+  font-size: 20px;
+  color: #2d3436;
+}
+
+.empty-section p {
+  margin: 0 0 24px 0;
+  font-size: 14px;
+  color: #a0937d;
+}
+
+.retry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+  border: none;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #2d3436;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.retry-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(253, 203, 110, 0.4);
 }
 
 /* 绘本详情弹窗 */
@@ -788,13 +1090,13 @@ onMounted(async () => {
 }
 
 .action-btn.primary {
-  background: linear-gradient(135deg, #e17055 0%, #d63031 100%);
+  background: linear-gradient(135deg, #55efc4 0%, #00b894 100%);
   color: #fff;
 }
 
 .action-btn.primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(225, 112, 85, 0.4);
+  box-shadow: 0 8px 20px rgba(0, 184, 148, 0.4);
 }
 
 .action-btn.secondary {
@@ -813,26 +1115,46 @@ onMounted(async () => {
 }
 
 /* 响应式 */
+@media (max-width: 1200px) {
+  .books-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
+  .tabs-section {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .books-grid {
     grid-template-columns: 1fr;
   }
 
-  .selector-content {
+  .selector-section {
     flex-direction: column;
-    gap: 16px;
+    align-items: stretch;
   }
 
-  .tabs-wrapper {
-    flex-wrap: wrap;
+  .selector-card {
+    max-width: none;
+  }
+
+  .refresh-btn {
+    width: 100%;
+    justify-content: center;
   }
 
   .modal-body {
     grid-template-columns: 1fr;
+    padding: 20px;
   }
 
   .info-grid {
     grid-template-columns: 1fr;
+  }
+
+  .modal-actions {
+    flex-wrap: wrap;
   }
 }
 </style>

@@ -21,4 +21,8 @@ public class PageDTO extends Page<Object> {
     private String category;
 
     private String status;
+
+    private String role;
+
+    private String username;
 }
