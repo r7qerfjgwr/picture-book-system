@@ -267,10 +267,10 @@ const getBookId = (item) => {
 // 获取分类emoji
 const getBookEmoji = (category) => {
   const emojis = {
-    '动物': '🐻',
-    '科普': '🔬',
-    '情感': '❤️',
-    '童话': '🏰'
+    '认知启蒙': '🧒', '情感培养': '❤️', '生活习惯': '🧴',
+    '故事': '🏰', '科学探索': '🔬', '品格教育': '🌟',
+    '社会交往': '🤝', '益智游戏': '🧩', '艺术启蒙': '🎨',
+    '安全教育': '🛡️'
   }
   return emojis[category] || '📖'
 }
@@ -278,10 +278,16 @@ const getBookEmoji = (category) => {
 // 获取封面样式
 const getCoverStyle = (category) => {
   const gradients = {
-    '动物': 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)',
-    '科普': 'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)',
-    '情感': 'linear-gradient(135deg, #ffeaa7 0%, #ffb88c 100%)',
-    '童话': 'linear-gradient(135deg, #f5e6d3 0%, #d4a574 100%)'
+    '认知启蒙': 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)',
+    '情感培养': 'linear-gradient(135deg, #ffeaa7 0%, #ffb88c 100%)',
+    '生活习惯': 'linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%)',
+    '故事': 'linear-gradient(135deg, #f5e6d3 0%, #d4a574 100%)',
+    '科学探索': 'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)',
+    '品格教育': 'linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%)',
+    '社会交往': 'linear-gradient(135deg, #fdcbf1 0%, #e6dee9 100%)',
+    '益智游戏': 'linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%)',
+    '艺术启蒙': 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+    '安全教育': 'linear-gradient(135deg, #fccb90 0%, #d57eeb 100%)'
   }
   return {
     background: gradients[category] || 'linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%)'

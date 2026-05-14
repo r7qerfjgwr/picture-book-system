@@ -1,0 +1,254 @@
+meta:
+  profile: academic-paper
+  figureType: architecture
+  theme: academic-color
+  layout: vertical
+  title: 系统功能模块图
+  description: 儿童绘本阅读系统功能模块划分，包含管理员端、教师端、家长端及公共模块
+modules:
+  - id: main
+    label: 儿童绘本阅读系统
+  - id: admin
+    label: 管理员端
+  - id: teacher
+    label: 教师端
+  - id: parent
+    label: 家长端
+  - id: common
+    label: 公共功能模块
+nodes:
+  - id: main_system
+    label: 儿童绘本阅读系统
+    type: user
+    module: main
+    position:
+      x: 300
+      'y': 40
+  - id: admin_module
+    label: 管理员端
+    type: service
+    module: admin
+    position:
+      x: 100
+      'y': 180
+  - id: admin_user
+    label: 用户管理
+    type: service
+    module: admin
+    position:
+      x: 60
+      'y': 280
+  - id: admin_book
+    label: 绘本管理
+    type: service
+    module: admin
+    position:
+      x: 60
+      'y': 340
+  - id: admin_class
+    label: 班级管理
+    type: service
+    module: admin
+    position:
+      x: 60
+      'y': 400
+  - id: admin_analysis
+    label: 儿童分析概览
+    type: service
+    module: admin
+    position:
+      x: 60
+      'y': 460
+  - id: admin_stats
+    label: 数据统计
+    type: service
+    module: admin
+    position:
+      x: 60
+      'y': 520
+  - id: teacher_module
+    label: 教师端
+    type: service
+    module: teacher
+    position:
+      x: 300
+      'y': 180
+  - id: teacher_class
+    label: 班级管理
+    type: service
+    module: teacher
+    position:
+      x: 260
+      'y': 280
+  - id: teacher_record
+    label: 学生阅读记录
+    type: service
+    module: teacher
+    position:
+      x: 260
+      'y': 340
+  - id: teacher_analysis
+    label: 行为分析
+    type: service
+    module: teacher
+    position:
+      x: 260
+      'y': 400
+  - id: teacher_growth
+    label: 成长跟踪
+    type: service
+    module: teacher
+    position:
+      x: 260
+      'y': 460
+  - id: teacher_recommend
+    label: 绘本推荐
+    type: service
+    module: teacher
+    position:
+      x: 260
+      'y': 520
+  - id: parent_module
+    label: 家长端
+    type: service
+    module: parent
+    position:
+      x: 500
+      'y': 180
+  - id: parent_child
+    label: 儿童管理
+    type: service
+    module: parent
+    position:
+      x: 460
+      'y': 280
+  - id: parent_record
+    label: 阅读记录
+    type: service
+    module: parent
+    position:
+      x: 460
+      'y': 340
+  - id: parent_analysis
+    label: 行为分析
+    type: service
+    module: parent
+    position:
+      x: 460
+      'y': 400
+  - id: parent_growth
+    label: 成长跟踪
+    type: service
+    module: parent
+    position:
+      x: 460
+      'y': 460
+  - id: parent_recommend
+    label: 绘本推荐
+    type: service
+    module: parent
+    position:
+      x: 460
+      'y': 520
+  - id: common_module
+    label: 公共功能模块
+    type: service
+    module: common
+    position:
+      x: 300
+      'y': 640
+  - id: common_login
+    label: 系统登录
+    type: service
+    module: common
+    position:
+      x: 180
+      'y': 720
+  - id: common_browse
+    label: 绘本分类浏览
+    type: service
+    module: common
+    position:
+      x: 280
+      'y': 720
+  - id: common_profile
+    label: 个人中心
+    type: service
+    module: common
+    position:
+      x: 380
+      'y': 720
+  - id: common_notify
+    label: 消息通知
+    type: service
+    module: common
+    position:
+      x: 480
+      'y': 720
+edges:
+  - from: main_system
+    to: admin_module
+    type: primary
+  - from: main_system
+    to: teacher_module
+    type: primary
+  - from: main_system
+    to: parent_module
+    type: primary
+  - from: admin_module
+    to: admin_user
+    type: data
+  - from: admin_module
+    to: admin_book
+    type: data
+  - from: admin_module
+    to: admin_class
+    type: data
+  - from: admin_module
+    to: admin_analysis
+    type: data
+  - from: admin_module
+    to: admin_stats
+    type: data
+  - from: teacher_module
+    to: teacher_class
+    type: data
+  - from: teacher_module
+    to: teacher_record
+    type: data
+  - from: teacher_module
+    to: teacher_analysis
+    type: data
+  - from: teacher_module
+    to: teacher_growth
+    type: data
+  - from: teacher_module
+    to: teacher_recommend
+    type: data
+  - from: parent_module
+    to: parent_child
+    type: data
+  - from: parent_module
+    to: parent_record
+    type: data
+  - from: parent_module
+    to: parent_analysis
+    type: data
+  - from: parent_module
+    to: parent_growth
+    type: data
+  - from: parent_module
+    to: parent_recommend
+    type: data
+  - from: common_module
+    to: common_login
+    type: data
+  - from: common_module
+    to: common_browse
+    type: data
+  - from: common_module
+    to: common_profile
+    type: data
+  - from: common_module
+    to: common_notify
+    type: data

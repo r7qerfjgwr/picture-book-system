@@ -1,0 +1,840 @@
+meta:
+  theme: tech-blue
+  layout: horizontal
+  source: edited
+  title: 系统数据库ER图
+modules: []
+nodes:
+  - id: nzone1
+    label: 用户管理
+    type: service
+    position:
+      x: 168
+      'y': 368
+    size: xl
+    style:
+      fillColor: '#DAE8FC'
+      strokeColor: '#6c8ebf'
+      fontSize: 13
+  - id: nzone2
+    label: 班级与儿童
+    type: service
+    position:
+      x: 528
+      'y': 368
+    size: xl
+    style:
+      fillColor: '#D5E8D4'
+      strokeColor: '#82b366'
+      fontSize: 13
+  - id: nzone3
+    label: 绘本管理
+    type: service
+    position:
+      x: 888
+      'y': 368
+    size: xl
+    style:
+      fillColor: '#FFF2CC'
+      strokeColor: '#d6b656'
+      fontSize: 13
+  - id: nzone4
+    label: 阅读行为
+    type: service
+    position:
+      x: 1272
+      'y': 368
+    size: xl
+    style:
+      fillColor: '#E1D5E7'
+      strokeColor: '#9673a6'
+      fontSize: 13
+  - id: nzone5
+    label: 分析与成长
+    type: service
+    position:
+      x: 1664
+      'y': 368
+    size: xl
+    style:
+      fillColor: '#F8CECC'
+      strokeColor: '#b85450'
+      fontSize: 13
+  - id: ne_sys_user
+    label: >-
+      sys_user 用户表&#xa; id PK&#xa; role_id FK&#xa;username
+      UK&#xa;password&#xa;real_name&#xa;phone&#xa;email&#xa;status&#xa;avatar&#xa;login_fail_count&#xa;last_login_time&#xa;create_time&#xa;update_time
+    type: user
+    position:
+      x: 160
+      'y': 344
+    size: xl
+    style:
+      fillColor: '#FFFFFF'
+      strokeColor: '#6c8ebf'
+      strokeWidth: 2
+      fontSize: 11
+  - id: ne_class_info
+    label: >-
+      class_info 班级表&#xa; id PK&#xa; teacher_id
+      FK&#xa;class_name&#xa;institution_name&#xa;student_count&#xa;description&#xa;create_time&#xa;update_time
+    type: service
+    position:
+      x: 504
+      'y': 200
+    size: xl
+    style:
+      fillColor: '#FFFFFF'
+      strokeColor: '#82b366'
+      strokeWidth: 2
+      fontSize: 11
+  - id: ne_child
+    label: >-
+      child 儿童表&#xa; id PK&#xa; parent_id FK&#xa; class_id
+      FK&#xa;name&#xa;birth_date&#xa;gender&#xa;avatar&#xa;reading_type&#xa;interest_tags&#xa;focus_score&#xa;cognitive_stage&#xa;reading_ability_score&#xa;milestone&#xa;create_time&#xa;update_time
+    type: terminal
+    position:
+      x: 504
+      'y': 512
+    size: xl
+    style:
+      fillColor: '#FFFFFF'
+      strokeColor: '#82b366'
+      strokeWidth: 2
+      fontSize: 11
+  - id: ne_book
+    label: >-
+      book 绘本表&#xa; id
+      PK&#xa;title&#xa;author&#xa;publisher&#xa;category&#xa;sub_category&#xa;difficulty_level&#xa;page_count&#xa;age_range&#xa;knowledge_type&#xa;art_style&#xa;theme&#xa;keywords&#xa;cover_url&#xa;description&#xa;vocabulary_count&#xa;read_count&#xa;status&#xa;create_time&#xa;update_time
+    type: service
+    position:
+      x: 872
+      'y': 400
+    size: xl
+    style:
+      fillColor: '#FFFFFF'
+      strokeColor: '#d6b656'
+      strokeWidth: 2
+      fontSize: 11
+  - id: ne_book_page
+    label: book_page 绘本页面表&#xa; id PK&#xa; book_id FK&#xa;page_num&#xa;illustration&#xa;text&#xa;create_time
+    type: service
+    position:
+      x: 872
+      'y': 160
+    size: xl
+    style:
+      fillColor: '#FFFFFF'
+      strokeColor: '#d6b656'
+      strokeWidth: 2
+      fontSize: 11
+  - id: ne_reading_log
+    label: >-
+      reading_log 阅读日志表&#xa; id PK&#xa; child_id FK&#xa; book_id
+      FK&#xa;start_time&#xa;end_time&#xa;duration&#xa;page_stay_times&#xa;page_turn_count&#xa;is_completed&#xa;completion_rate&#xa;avg_page_stay_time&#xa;focus_score&#xa;replay_count&#xa;bookmark_count&#xa;annotation_count&#xa;voice_record_count&#xa;emotion_data&#xa;create_time
+    type: terminal
+    position:
+      x: 1224
+      'y': 256
+    size: xl
+    style:
+      fillColor: '#FFFFFF'
+      strokeColor: '#9673a6'
+      strokeWidth: 2
+      fontSize: 11
+  - id: ne_reading_bookmark
+    label: reading_bookmark 收藏记录表&#xa; id PK&#xa; child_id FK&#xa; book_id FK&#xa;bookmark_type&#xa;note&#xa;create_time
+    type: service
+    position:
+      x: 1224
+      'y': 504
+    size: xl
+    style:
+      fillColor: '#FFFFFF'
+      strokeColor: '#9673a6'
+      strokeWidth: 2
+      fontSize: 11
+  - id: ne_reading_annotation
+    label: >-
+      reading_annotation 批注记录表&#xa; id PK&#xa; child_id FK&#xa; book_id
+      FK&#xa;page_num&#xa;annotation_type&#xa;content&#xa;position_x&#xa;position_y&#xa;create_time
+    type: service
+    position:
+      x: 1224
+      'y': 648
+    size: xl
+    style:
+      fillColor: '#FFFFFF'
+      strokeColor: '#9673a6'
+      strokeWidth: 2
+      fontSize: 11
+  - id: ne_behavior_analysis
+    label: >-
+      behavior_analysis 行为分析表&#xa; id PK&#xa; child_id
+      FK&#xa;reading_type&#xa;interest_tags&#xa;focus_score&#xa;avg_reading_duration&#xa;completion_rate&#xa;cognitive_stage&#xa;reading_ability_score&#xa;emotion_stability_score&#xa;growth_prediction_score&#xa;analysis_date&#xa;create_time&#xa;update_time
+    type: output
+    position:
+      x: 1640
+      'y': 224
+    size: xl
+    style:
+      fillColor: '#FFFFFF'
+      strokeColor: '#b85450'
+      strokeWidth: 2
+      fontSize: 11
+  - id: ne_growth_report
+    label: >-
+      growth_report 成长报告表&#xa; id PK&#xa; child_id
+      FK&#xa;vocabulary_score&#xa;logic_score&#xa;reading_score&#xa;focus_score&#xa;total_score&#xa;report_type&#xa;report_date&#xa;suggestion&#xa;cognitive_score&#xa;social_score&#xa;creativity_score&#xa;habit_score&#xa;milestones&#xa;create_time
+    type: document
+    position:
+      x: 1640
+      'y': 512
+    size: xl
+    style:
+      fillColor: '#FFFFFF'
+      strokeColor: '#b85450'
+      strokeWidth: 2
+      fontSize: 11
+  - id: ne_recommendation
+    label: >-
+      recommendation 推荐记录表&#xa; id PK&#xa; child_id FK&#xa; book_id
+      FK&#xa;recommend_type&#xa;recommend_score&#xa;reason&#xa;is_read&#xa;create_time
+    type: terminal
+    position:
+      x: 1640
+      'y': 744
+    size: xl
+    style:
+      fillColor: '#FFFFFF'
+      strokeColor: '#b85450'
+      strokeWidth: 2
+      fontSize: 11
+  - id: nr_manage
+    label: 管理
+    type: decision
+    position:
+      x: 336
+      'y': 192
+    size: small
+    style:
+      fillColor: '#FFFFFF'
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      fontSize: 11
+  - id: nr_parent
+    label: 所属家长
+    type: decision
+    position:
+      x: 336
+      'y': 448
+    size: small
+    style:
+      fillColor: '#FFFFFF'
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      fontSize: 11
+  - id: nr_class
+    label: 所属班级
+    type: decision
+    position:
+      x: 496
+      'y': 320
+    size: small
+    style:
+      fillColor: '#FFFFFF'
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      fontSize: 11
+  - id: nr_bookpage
+    label: 所属绘本
+    type: decision
+    position:
+      x: 888
+      'y': 192
+    size: small
+    style:
+      fillColor: '#FFFFFF'
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      fontSize: 11
+  - id: nr_log_child
+    label: 阅读儿童
+    type: decision
+    position:
+      x: 816
+      'y': 592
+    size: small
+    style:
+      fillColor: '#FFFFFF'
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      fontSize: 11
+  - id: nr_log_book
+    label: 阅读绘本
+    type: decision
+    position:
+      x: 1088
+      'y': 192
+    size: small
+    style:
+      fillColor: '#FFFFFF'
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      fontSize: 11
+  - id: nr_bmk_child
+    label: 收藏
+    type: decision
+    position:
+      x: 816
+      'y': 688
+    size: small
+    style:
+      fillColor: '#FFFFFF'
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      fontSize: 11
+  - id: nr_bmk_book
+    label: 收藏绘本
+    type: decision
+    position:
+      x: 1088
+      'y': 512
+    size: small
+    style:
+      fillColor: '#FFFFFF'
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      fontSize: 11
+  - id: nr_analysis
+    label: 分析
+    type: decision
+    position:
+      x: 1416
+      'y': 448
+    size: small
+    style:
+      fillColor: '#FFFFFF'
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      fontSize: 11
+  - id: nr_report
+    label: 报告
+    type: decision
+    position:
+      x: 1416
+      'y': 552
+    size: small
+    style:
+      fillColor: '#FFFFFF'
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      fontSize: 11
+  - id: ne1_1
+    label: '1'
+    type: service
+    position:
+      x: 288
+      'y': 200
+    size: tiny
+    style:
+      fontColor: '#333333'
+      fontSize: 12
+  - id: ne1_n
+    label: 'N'
+    type: service
+    position:
+      x: 384
+      'y': 200
+    size: tiny
+    style:
+      fontColor: '#333333'
+      fontSize: 12
+  - id: ne2_1
+    label: '1'
+    type: service
+    position:
+      x: 288
+      'y': 456
+    size: tiny
+    style:
+      fontColor: '#333333'
+      fontSize: 12
+  - id: ne2_n
+    label: 'N'
+    type: service
+    position:
+      x: 384
+      'y': 456
+    size: tiny
+    style:
+      fontColor: '#333333'
+      fontSize: 12
+  - id: ne3_1
+    label: '1'
+    type: service
+    position:
+      x: 488
+      'y': 280
+    size: tiny
+    style:
+      fontColor: '#333333'
+      fontSize: 12
+  - id: ne3_n
+    label: 'N'
+    type: service
+    position:
+      x: 488
+      'y': 360
+    size: tiny
+    style:
+      fontColor: '#333333'
+      fontSize: 12
+  - id: ne4_1
+    label: '1'
+    type: service
+    position:
+      x: 872
+      'y': 232
+    size: tiny
+    style:
+      fontColor: '#333333'
+      fontSize: 12
+  - id: ne4_n
+    label: 'N'
+    type: service
+    position:
+      x: 872
+      'y': 160
+    size: tiny
+    style:
+      fontColor: '#333333'
+      fontSize: 12
+  - id: ne5_1
+    label: '1'
+    type: service
+    position:
+      x: 632
+      'y': 592
+    size: tiny
+    style:
+      fontColor: '#333333'
+      fontSize: 12
+  - id: ne5_n
+    label: 'N'
+    type: service
+    position:
+      x: 760
+      'y': 592
+    size: tiny
+    style:
+      fontColor: '#333333'
+      fontSize: 12
+  - id: ne6_1
+    label: '1'
+    type: service
+    position:
+      x: 1000
+      'y': 200
+    size: tiny
+    style:
+      fontColor: '#333333'
+      fontSize: 12
+  - id: ne6_n
+    label: 'N'
+    type: service
+    position:
+      x: 1048
+      'y': 232
+    size: tiny
+    style:
+      fontColor: '#333333'
+      fontSize: 12
+  - id: ne7_1
+    label: '1'
+    type: service
+    position:
+      x: 632
+      'y': 664
+    size: tiny
+    style:
+      fontColor: '#333333'
+      fontSize: 12
+  - id: ne7_n
+    label: 'N'
+    type: service
+    position:
+      x: 760
+      'y': 688
+    size: tiny
+    style:
+      fontColor: '#333333'
+      fontSize: 12
+  - id: ne8_1
+    label: '1'
+    type: service
+    position:
+      x: 1000
+      'y': 504
+    size: tiny
+    style:
+      fontColor: '#333333'
+      fontSize: 12
+  - id: ne8_n
+    label: 'N'
+    type: service
+    position:
+      x: 1048
+      'y': 552
+    size: tiny
+    style:
+      fontColor: '#333333'
+      fontSize: 12
+  - id: ne9_1
+    label: '1'
+    type: service
+    position:
+      x: 720
+      'y': 448
+    size: tiny
+    style:
+      fontColor: '#333333'
+      fontSize: 12
+  - id: ne9_n
+    label: 'N'
+    type: service
+    position:
+      x: 1360
+      'y': 448
+    size: tiny
+    style:
+      fontColor: '#333333'
+      fontSize: 12
+  - id: ne10_1
+    label: '1'
+    type: service
+    position:
+      x: 744
+      'y': 552
+    size: tiny
+    style:
+      fontColor: '#333333'
+      fontSize: 12
+  - id: ne10_n
+    label: 'N'
+    type: service
+    position:
+      x: 1360
+      'y': 552
+    size: tiny
+    style:
+      fontColor: '#333333'
+      fontSize: 12
+  - id: nlegend_box
+    label: nlegend_box
+    type: terminal
+    position:
+      x: 1648
+      'y': 912
+    size: xl
+    style:
+      fillColor: '#FFFFFF'
+      strokeColor: '#666666'
+      strokeWidth: 1.5
+  - id: nlegend_title
+    label: 图例
+    type: service
+    position:
+      x: 1648
+      'y': 848
+    size: tiny
+    style:
+      fontColor: '#333333'
+      fontSize: 13
+  - id: nlegend_entity
+    label: nlegend_entity
+    type: terminal
+    position:
+      x: 1576
+      'y': 880
+    size: tiny
+    style:
+      fillColor: '#FFFFFF'
+      strokeColor: '#333333'
+      strokeWidth: 2
+  - id: nlegend_entity_t
+    label: 实体（矩形框）
+    type: service
+    position:
+      x: 1664
+      'y': 880
+    size: medium
+    style:
+      fontColor: '#333333'
+      fontSize: 11
+  - id: nlegend_rel
+    label: nlegend_rel
+    type: decision
+    position:
+      x: 1576
+      'y': 912
+    size: tiny
+    style:
+      fillColor: '#FFFFFF'
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+  - id: nlegend_rel_t
+    label: 关系（菱形）
+    type: service
+    position:
+      x: 1664
+      'y': 912
+    size: medium
+    style:
+      fontColor: '#333333'
+      fontSize: 11
+  - id: nlegend_line_t
+    label: 1:N 关系
+    type: service
+    position:
+      x: 1664
+      'y': 944
+    size: medium
+    style:
+      fontColor: '#333333'
+      fontSize: 11
+  - id: nlegend_pk
+    label: id
+    type: service
+    position:
+      x: 1576
+      'y': 968
+    size: tiny
+    style:
+      fontColor: '#333333'
+      fontSize: 11
+  - id: nlegend_pk_t
+    label: 主键（下划线）
+    type: service
+    position:
+      x: 1664
+      'y': 968
+    size: medium
+    style:
+      fontColor: '#333333'
+      fontSize: 11
+  - id: nlegend_fk
+    label: fk
+    type: service
+    position:
+      x: 1576
+      'y': 984
+    size: tiny
+    style:
+      fontColor: '#333333'
+      fontSize: 11
+  - id: nlegend_fk_t
+    label: 外键（粗体）
+    type: service
+    position:
+      x: 1664
+      'y': 984
+    size: medium
+    style:
+      fontColor: '#333333'
+      fontSize: 11
+edges:
+  - from: ne_sys_user
+    to: nr_manage
+    type: bidirectional
+    style:
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      endArrow: none
+  - from: nr_manage
+    to: ne_class_info
+    type: bidirectional
+    style:
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      endArrow: none
+  - from: ne_sys_user
+    to: nr_parent
+    type: bidirectional
+    style:
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      endArrow: none
+  - from: nr_parent
+    to: ne_child
+    type: bidirectional
+    style:
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      endArrow: none
+  - from: ne_class_info
+    to: nr_class
+    type: bidirectional
+    style:
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      endArrow: none
+  - from: nr_class
+    to: ne_child
+    type: bidirectional
+    style:
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      endArrow: none
+  - from: ne_book
+    to: nr_bookpage
+    type: bidirectional
+    style:
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      endArrow: none
+  - from: nr_bookpage
+    to: ne_book_page
+    type: bidirectional
+    style:
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      endArrow: none
+  - from: ne_child
+    to: nr_log_child
+    type: bidirectional
+    style:
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      endArrow: none
+  - from: nr_log_child
+    to: ne_reading_log
+    type: bidirectional
+    style:
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      endArrow: none
+      exitX: 1
+      exitY: 0.5
+      exitDx: 0
+      exitDy: 0
+    waypoints:
+      - x: 970
+        'y': 590
+      - x: 970
+        'y': 255
+  - from: ne_book
+    to: nr_log_book
+    type: bidirectional
+    style:
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      endArrow: none
+  - from: nr_log_book
+    to: ne_reading_log
+    type: bidirectional
+    style:
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      endArrow: none
+  - from: ne_child
+    to: nr_bmk_child
+    type: bidirectional
+    style:
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      endArrow: none
+  - from: nr_bmk_child
+    to: ne_reading_bookmark
+    type: bidirectional
+    style:
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      endArrow: none
+      exitX: 1
+      exitY: 0.5
+      exitDx: 0
+      exitDy: 0
+    waypoints:
+      - x: 970
+        'y': 690
+      - x: 970
+        'y': 500
+  - from: ne_book
+    to: nr_bmk_book
+    type: bidirectional
+    style:
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      endArrow: none
+  - from: nr_bmk_book
+    to: ne_reading_bookmark
+    type: bidirectional
+    style:
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      endArrow: none
+  - from: ne_child
+    to: nr_analysis
+    type: bidirectional
+    style:
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      endArrow: none
+      exitX: 1
+      exitY: 0.5
+      exitDx: 0
+      exitDy: 0
+    waypoints:
+      - x: 700
+        'y': 510
+      - x: 700
+        'y': 450
+  - from: nr_analysis
+    to: ne_behavior_analysis
+    type: bidirectional
+    style:
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      endArrow: none
+      entryX: 0
+      entryY: 0.5
+      entryDx: 0
+      entryDy: 0
+    waypoints:
+      - x: 1460
+        'y': 450
+      - x: 1460
+        'y': 225
+  - from: ne_child
+    to: nr_report
+    type: bidirectional
+    style:
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      endArrow: none
+      exitX: 1
+      exitY: 0.5
+      exitDx: 0
+      exitDy: 0
+    waypoints:
+      - x: 720
+        'y': 510
+      - x: 720
+        'y': 550
+  - from: nr_report
+    to: ne_growth_report
+    type: bidirectional
+    style:
+      strokeColor: '#333333'
+      strokeWidth: 1.5
+      endArrow: none
+      entryX: 0
+      entryY: 0.5
+      entryDx: 0
+      entryDy: 0
+    waypoints:
+      - x: 1460
+        'y': 550
+      - x: 1460
+        'y': 510

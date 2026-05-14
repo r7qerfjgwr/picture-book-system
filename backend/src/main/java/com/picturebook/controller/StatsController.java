@@ -109,4 +109,10 @@ public class StatsController {
             @RequestParam(defaultValue = "10") Integer limit) {
         return Result.success(statsService.getChildrenRanking(type, limit));
     }
+
+    @Operation(summary = "获取可视化大屏数据")
+    @GetMapping("/bigscreen")
+    public Result<Map<String, Object>> getBigscreenData() {
+        return Result.success(statsService.getBigscreenData());
+    }
 }

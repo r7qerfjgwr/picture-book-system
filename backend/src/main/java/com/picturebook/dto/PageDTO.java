@@ -25,4 +25,6 @@ public class PageDTO extends Page<Object> {
     private String role;
 
     private String username;
+
+    private Integer difficultyLevel;
 }

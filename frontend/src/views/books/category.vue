@@ -25,6 +25,22 @@
           <span>智能筛选</span>
         </div>
         <div class="filter-grid">
+          <div class="filter-item search-item">
+            <label>搜索绘本</label>
+            <input
+              v-model="filterForm.keyword"
+              type="text"
+              placeholder="输入名称或作者搜索..."
+              @keyup.enter="applyFilter"
+              @input="applyFilter"
+            />
+          </div>
+          <div class="filter-item" v-if="categoryInfo.subCategories && categoryInfo.subCategories.length > 2">
+            <label>子分类</label>
+            <select v-model="filterForm.subCategory" @change="applyFilter">
+              <option v-for="sub in categoryInfo.subCategories" :key="sub" :value="sub === '全部' ? '' : sub">{{ sub }}</option>
+            </select>
+          </div>
           <div class="filter-item">
             <label>适合年龄</label>
             <select v-model="filterForm.ageRange" @change="applyFilter">
@@ -87,13 +103,13 @@
           <span class="section-title">绘本列表</span>
         </div>
         <div class="book-count">
-          共找到 <span class="count-num">{{ books.length }}</span> 本绘本
+          共找到 <span class="count-num">{{ filteredBooks.length }}</span> 本绘本
         </div>
       </div>
 
-      <div class="books-grid" v-if="books.length > 0">
+      <div class="books-grid" v-if="pagedBooks.length > 0">
         <div
-          v-for="book in books"
+          v-for="book in pagedBooks"
           :key="book.id"
           class="book-card"
           @click="viewBook(book)"
@@ -133,13 +149,13 @@
       </div>
 
       <!-- 分页 -->
-      <div class="pagination-wrapper" v-if="books.length > 0">
+      <div class="pagination-wrapper" v-if="filteredBooks.length > 0">
         <div class="pagination">
-          <button class="page-btn" :disabled="pagination.page === 1" @click="pagination.page--; loadBooks()">
+          <button class="page-btn" :disabled="pagination.page === 1" @click="pagination.page--">
             ◀ 上一页
           </button>
-          <span class="page-info">第 {{ pagination.page }} 页</span>
-          <button class="page-btn" :disabled="books.length < pagination.size" @click="pagination.page++; loadBooks()">
+          <span class="page-info">第 {{ pagination.page }} / {{ totalPages }} 页</span>
+          <button class="page-btn" :disabled="pagination.page >= totalPages" @click="pagination.page++">
             下一页 ▶
           </button>
         </div>
@@ -252,54 +268,60 @@ const selectedChildId = ref(null)
 const isBookmarked = ref(false)
 
 const categoryConfig = {
-  animal: {
-    title: '动物类绘本',
-    description: '认识可爱的动物朋友，探索神奇的动物世界',
-    emoji: '🐻',
-    decoEmoji: '🦁🐘🦒',
-    theme: 'animal',
-    dbCategory: '动物'
+  cognitive: {
+    title: '认知启蒙类绘本',
+    description: '启蒙认知、养成好习惯、锻炼思维能力',
+    emoji: '🧒',
+    decoEmoji: '🧩🧴📚',
+    theme: 'cognitive',
+    dbCategories: ['认知启蒙', '生活习惯', '益智游戏'],
+    subCategories: ['全部', '认知启蒙', '生活习惯', '益智游戏']
   },
   science: {
-    title: '科普类绘本',
-    description: '探索科学的奥秘，培养小小科学家',
+    title: '科普探索类绘本',
+    description: '探索科学奥秘，感受艺术之美',
     emoji: '🔬',
-    decoEmoji: '🚀🌍💡',
+    decoEmoji: '🚀🌍🎨',
     theme: 'science',
-    dbCategory: '科普'
+    dbCategories: ['科学探索', '艺术启蒙'],
+    subCategories: ['全部', '科学探索', '艺术启蒙']
   },
   emotion: {
-    title: '情感类绘本',
-    description: '感受爱与温暖，培养情商与品格',
+    title: '情感培养类绘本',
+    description: '感受爱与温暖，培养品格与社交能力',
     emoji: '❤️',
-    decoEmoji: '🌸💝🌈',
+    decoEmoji: '🌸💝🤝',
     theme: 'emotion',
-    dbCategory: '情感'
+    dbCategories: ['情感培养', '品格教育', '社会交往'],
+    subCategories: ['全部', '情感培养', '品格教育', '社会交往']
   },
-  fairy_tale: {
-    title: '童话类绘本',
-    description: '走进梦幻童话世界，开启奇妙冒险',
+  story: {
+    title: '童话故事类绘本',
+    description: '走进梦幻童话世界，学会自我保护',
     emoji: '🏰',
-    decoEmoji: '👑🧚✨',
-    theme: 'fairy',
-    dbCategory: '童话'
+    decoEmoji: '👑🛡️✨',
+    theme: 'story',
+    dbCategories: ['故事', '安全教育'],
+    subCategories: ['全部', '故事', '安全教育']
   }
 }
 
 const categoryInfo = computed(() => {
-  const category = route.params.category || 'animal'
-  return categoryConfig[category] || categoryConfig.animal
+  const category = route.params.category || 'cognitive'
+  return categoryConfig[category] || categoryConfig.cognitive
 })
 
 const categoryTheme = computed(() => {
   return categoryInfo.value.theme
 })
 
-const ageRanges = ref(['3-4岁', '4-5岁', '5-6岁'])
-const knowledgeTypes = ref(['语言', '数学', '科学', '艺术', '社会'])
-const artStyles = ref(['水彩', '卡通', '写实', '剪纸', '拼贴'])
+const ageRanges = ref(['2-3岁', '3-4岁', '4-5岁'])
+const knowledgeTypes = ref(['语言发展', '认知发展', '情感表达', '科学素养', '社会适应', '生活技能', '品德修养', '逻辑思维', '艺术审美', '安全意识'])
+const artStyles = ref(['水彩画', '卡通画', '手绘插画', '写实画', '拼贴画'])
 
 const filterForm = reactive({
+  keyword: '',
+  subCategory: '',
   category: '',
   ageRange: '',
   knowledgeType: '',
@@ -307,36 +329,57 @@ const filterForm = reactive({
   difficultyLevel: null
 })
 
+const filteredBooks = computed(() => {
+  if (!filterForm.keyword) return books.value
+  const kw = filterForm.keyword.toLowerCase()
+  return books.value.filter(b =>
+    b.title?.toLowerCase().includes(kw) || b.author?.toLowerCase().includes(kw)
+  )
+})
+
+const pagedBooks = computed(() => {
+  const start = (pagination.page - 1) * pagination.size
+  return filteredBooks.value.slice(start, start + pagination.size)
+})
+
+const totalPages = computed(() => Math.ceil(filteredBooks.value.length / pagination.size))
+
 const pagination = reactive({
   page: 1,
-  size: 12,
+  size: 8,
   total: 0
 })
 
 const quickTags = [
   { label: '热门推荐', value: 'hot', emoji: '🔥' },
-  { label: '3-4岁适合', value: 'age_3_4', emoji: '👶' },
-  { label: '科学启蒙', value: 'science', emoji: '🔬' },
-  { label: '情感培养', value: 'emotion', emoji: '❤️' },
-  { label: '水彩画风', value: 'watercolor', emoji: '🎨' }
+  { label: '2-3岁适合', value: 'age_2_3', emoji: '👶' },
+  { label: '3-4岁适合', value: 'age_3_4', emoji: '🧒' },
+  { label: '4-5岁适合', value: 'age_4_5', emoji: '👦' },
+  { label: '卡通画风', value: 'cartoon', emoji: '🎨' }
 ]
 
 const getBookEmoji = (category) => {
   const emojis = {
-    '动物': '🐻',
-    '科普': '🔬',
-    '情感': '❤️',
-    '童话': '🏰'
+    '认知启蒙': '🧒', '情感培养': '❤️', '生活习惯': '🧴',
+    '故事': '🏰', '科学探索': '🔬', '品格教育': '🌟',
+    '社会交往': '🤝', '益智游戏': '🧩', '艺术启蒙': '🎨',
+    '安全教育': '🛡️',
   }
   return emojis[category] || '📖'
 }
 
 const getCoverStyle = (book) => {
   const gradients = {
-    '动物': 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)',
-    '科普': 'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)',
-    '情感': 'linear-gradient(135deg, #ffecd2 0%, #ffb88c 100%)',
-    '童话': 'linear-gradient(135deg, #f5e6d3 0%, #d4a574 100%)'
+    '认知启蒙': 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)',
+    '情感培养': 'linear-gradient(135deg, #ffeaa7 0%, #ffb88c 100%)',
+    '生活习惯': 'linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%)',
+    '故事': 'linear-gradient(135deg, #f5e6d3 0%, #d4a574 100%)',
+    '科学探索': 'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)',
+    '品格教育': 'linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%)',
+    '社会交往': 'linear-gradient(135deg, #fdcbf1 0%, #e6dee9 100%)',
+    '益智游戏': 'linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%)',
+    '艺术启蒙': 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+    '安全教育': 'linear-gradient(135deg, #fccb90 0%, #d57eeb 100%)',
   }
   return {
     background: gradients[book.category] || 'linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%)'
@@ -350,34 +393,40 @@ const getDifficultyText = (level) => {
 
 const loadBooks = async () => {
   try {
-    const categoryKey = route.params.category || 'animal'
-    const dbCategory = categoryConfig[categoryKey]?.dbCategory || ''
-
-    // 检查是否有筛选条件（不包括category）
+    const categoryKey = route.params.category || 'cognitive'
+    const config = categoryConfig[categoryKey]
+    const dbCategories = config?.dbCategories || []
     const hasFilter = filterForm.ageRange || filterForm.knowledgeType ||
                       filterForm.artStyle || filterForm.difficultyLevel
 
-    // 如果是热门推荐，调用热门接口
     if (activeQuickTag.value === 'hot') {
-      const res = await filterBooks({ category: dbCategory })
-      // 按阅读次数排序，取热门绘本
-      books.value = (res.data || []).sort((a, b) => (b.readCount || 0) - (a.readCount || 0))
+      const allBooks = []
+      for (const cat of dbCategories) {
+        const res = await getBooksByCategory(cat, '')
+        allBooks.push(...(res.data || []))
+      }
+      books.value = allBooks.sort((a, b) => (b.readCount || 0) - (a.readCount || 0))
     } else if (hasFilter) {
-      // 构建筛选参数，只传递有值的参数
-      const params = {}
-      // 不传category，让筛选在整个绘本库中查找
-      if (filterForm.ageRange) params.ageRange = filterForm.ageRange
-      if (filterForm.knowledgeType) params.knowledgeType = filterForm.knowledgeType
-      if (filterForm.artStyle) params.artStyle = filterForm.artStyle
-      if (filterForm.difficultyLevel) params.difficultyLevel = Number(filterForm.difficultyLevel)
-
-      console.log('Filter params:', params)
-      const res = await filterBooks(params)
-      books.value = res.data || []
-      console.log('Filter result:', books.value.length)
+      const categories = filterForm.subCategory ? [filterForm.subCategory] : dbCategories
+      const allBooks = []
+      for (const cat of categories) {
+        const params = { category: cat }
+        if (filterForm.ageRange) params.ageRange = filterForm.ageRange
+        if (filterForm.knowledgeType) params.knowledgeType = filterForm.knowledgeType
+        if (filterForm.artStyle) params.artStyle = filterForm.artStyle
+        if (filterForm.difficultyLevel) params.difficultyLevel = Number(filterForm.difficultyLevel)
+        const res = await filterBooks(params)
+        allBooks.push(...(res.data || []))
+      }
+      books.value = allBooks
     } else {
-      const res = await getBooksByCategory(dbCategory, '')
-      books.value = res.data || []
+      const categories = filterForm.subCategory ? [filterForm.subCategory] : dbCategories
+      const allBooks = []
+      for (const cat of categories) {
+        const res = await getBooksByCategory(cat, '')
+        allBooks.push(...(res.data || []))
+      }
+      books.value = allBooks
     }
     pagination.total = books.value.length
   } catch (error) {
@@ -386,39 +435,14 @@ const loadBooks = async () => {
   }
 }
 
-const generateMockBooks = () => {
-  const category = route.params.category || 'animal'
-  const mockData = {
-    animal: [
-      { id: 1, title: '小熊的冒险', author: '张小明', category: '动物', ageRange: '3-4岁', rating: 4.5, readCount: 128, knowledgeType: '语言', artStyle: '水彩', pageCount: 24, description: '一只勇敢的小熊踏上寻找蜂蜜的冒险之旅，途中结识了许多动物朋友。' },
-      { id: 2, title: '森林里的音乐会', author: '李小红', category: '动物', ageRange: '4-5岁', rating: 4.8, readCount: 256, knowledgeType: '艺术', artStyle: '卡通', pageCount: 28, description: '森林里的小动物们举办了一场盛大的音乐会，每个动物都展示了自己的才艺。' },
-      { id: 3, title: '小兔子的新家', author: '王小刚', category: '动物', ageRange: '3-4岁', rating: 4.2, readCount: 89, knowledgeType: '社会', artStyle: '水彩', pageCount: 20, description: '小兔子要搬新家了，它和朋友们一起布置温馨的小窝。' },
-    ],
-    science: [
-      { id: 4, title: '太空探险记', author: '赵小美', category: '科普', ageRange: '5-6岁', rating: 4.7, readCount: 312, knowledgeType: '科学', artStyle: '写实', pageCount: 32, description: '跟随小宇航员一起探索神秘的太空，认识各种星球。' },
-      { id: 5, title: '神奇的水循环', author: '刘小华', category: '科普', ageRange: '4-5岁', rating: 4.4, readCount: 156, knowledgeType: '科学', artStyle: '卡通', pageCount: 26, description: '一滴小水珠的奇妙旅程，了解水的三种形态。' },
-    ],
-    emotion: [
-      { id: 6, title: '爱的抱抱', author: '孙小芳', category: '情感', ageRange: '3-4岁', rating: 4.9, readCount: 428, knowledgeType: '社会', artStyle: '水彩', pageCount: 22, description: '一个温暖的抱抱，传递着最真挚的爱与关怀。' },
-      { id: 7, title: '我的好朋友', author: '周小杰', category: '情感', ageRange: '4-5岁', rating: 4.6, readCount: 198, knowledgeType: '社会', artStyle: '卡通', pageCount: 24, description: '关于友情的小故事，学会分享与关心他人。' },
-    ],
-    fairy_tale: [
-      { id: 8, title: '灰姑娘的舞会', author: '吴小燕', category: '童话', ageRange: '4-5岁', rating: 4.8, readCount: 356, knowledgeType: '语言', artStyle: '水彩', pageCount: 30, description: '经典的灰姑娘故事，梦想终会实现。' },
-      { id: 9, title: '勇敢的小裁缝', author: '郑小龙', category: '童话', ageRange: '5-6岁', rating: 4.5, readCount: 167, knowledgeType: '语言', artStyle: '卡通', pageCount: 28, description: '一个小裁缝用智慧和勇气战胜了巨人。' },
-    ]
-  }
-  return mockData[category] || mockData.animal
-}
-
 const applyFilter = () => {
   pagination.page = 1
-  // 设置当前分类到筛选条件
-  const categoryKey = route.params.category || 'animal'
-  filterForm.category = categoryConfig[categoryKey]?.dbCategory || ''
   loadBooks()
 }
 
 const resetFilter = () => {
+  filterForm.keyword = ''
+  filterForm.subCategory = ''
   filterForm.ageRange = ''
   filterForm.knowledgeType = ''
   filterForm.artStyle = ''
@@ -433,6 +457,8 @@ const handleQuickFilter = (value) => {
   // 如果点击的是当前激活的标签，则取消筛选
   if (activeQuickTag.value === value) {
     activeQuickTag.value = ''
+    filterForm.keyword = ''
+    filterForm.subCategory = ''
     filterForm.ageRange = ''
     filterForm.knowledgeType = ''
     filterForm.artStyle = ''
@@ -447,6 +473,8 @@ const handleQuickFilter = (value) => {
   activeQuickTag.value = value
 
   // 重置筛选条件（不重置activeQuickTag）
+  filterForm.keyword = ''
+  filterForm.subCategory = ''
   filterForm.ageRange = ''
   filterForm.knowledgeType = ''
   filterForm.artStyle = ''
@@ -457,19 +485,18 @@ const handleQuickFilter = (value) => {
   // 设置新的筛选条件
   switch (value) {
     case 'hot':
-      // 热门推荐不需要额外筛选条件
+      break
+    case 'age_2_3':
+      filterForm.ageRange = '2-3岁'
       break
     case 'age_3_4':
       filterForm.ageRange = '3-4岁'
       break
-    case 'science':
-      filterForm.knowledgeType = '科学'
+    case 'age_4_5':
+      filterForm.ageRange = '4-5岁'
       break
-    case 'emotion':
-      filterForm.knowledgeType = '社会'
-      break
-    case 'watercolor':
-      filterForm.artStyle = '水彩'
+    case 'cartoon':
+      filterForm.artStyle = '卡通画'
       break
   }
 
@@ -598,7 +625,7 @@ onMounted(() => {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
-.category-banner.animal {
+.category-banner.cognitive {
   background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
 }
 
@@ -610,7 +637,7 @@ onMounted(() => {
   background: linear-gradient(135deg, #ffeaa7 0%, #ffb88c 100%);
 }
 
-.category-banner.fairy {
+.category-banner.story {
   background: linear-gradient(135deg, #f5e6d3 0%, #d4a574 100%);
 }
 
@@ -729,11 +756,24 @@ onMounted(() => {
   transition: all 0.3s ease;
 }
 
-.filter-item select:hover {
+.filter-item input {
+  padding: 12px 16px;
+  border: 2px solid #f0e6d3;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d3436;
+  background: #fefefe;
+  transition: all 0.3s ease;
+}
+
+.filter-item select:hover,
+.filter-item input:hover {
   border-color: #ffd93d;
 }
 
-.filter-item select:focus {
+.filter-item select:focus,
+.filter-item input:focus {
   outline: none;
   border-color: #e17055;
   box-shadow: 0 0 0 3px rgba(225, 112, 85, 0.1);

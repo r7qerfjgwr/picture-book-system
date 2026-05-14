@@ -1,0 +1,481 @@
+{
+  "version": 1,
+  "title": "系统数据库ER图",
+  "type": "flow-diagram",
+  "source": "edited",
+  "profile": "default",
+  "theme": "tech-blue",
+  "layout": "horizontal",
+  "counts": {
+    "nodes": 57,
+    "edges": 20,
+    "modules": 0
+  },
+  "nodes": [
+    {
+      "id": "nzone1",
+      "label": "用户管理",
+      "type": "service",
+      "size": "xl"
+    },
+    {
+      "id": "nzone2",
+      "label": "班级与儿童",
+      "type": "service",
+      "size": "xl"
+    },
+    {
+      "id": "nzone3",
+      "label": "绘本管理",
+      "type": "service",
+      "size": "xl"
+    },
+    {
+      "id": "nzone4",
+      "label": "阅读行为",
+      "type": "service",
+      "size": "xl"
+    },
+    {
+      "id": "nzone5",
+      "label": "分析与成长",
+      "type": "service",
+      "size": "xl"
+    },
+    {
+      "id": "ne_sys_user",
+      "label": "sys_user 用户表&#xa; id PK&#xa; role_id FK&#xa;username UK&#xa;password&#xa;real_name&#xa;phone&#xa;email&#xa;status&#xa;avatar&#xa;login_fail_count&#xa;last_login_time&#xa;create_time&#xa;update_time",
+      "type": "user",
+      "size": "xl"
+    },
+    {
+      "id": "ne_class_info",
+      "label": "class_info 班级表&#xa; id PK&#xa; teacher_id FK&#xa;class_name&#xa;institution_name&#xa;student_count&#xa;description&#xa;create_time&#xa;update_time",
+      "type": "service",
+      "size": "xl"
+    },
+    {
+      "id": "ne_child",
+      "label": "child 儿童表&#xa; id PK&#xa; parent_id FK&#xa; class_id FK&#xa;name&#xa;birth_date&#xa;gender&#xa;avatar&#xa;reading_type&#xa;interest_tags&#xa;focus_score&#xa;cognitive_stage&#xa;reading_ability_score&#xa;milestone&#xa;create_time&#xa;update_time",
+      "type": "terminal",
+      "size": "xl"
+    },
+    {
+      "id": "ne_book",
+      "label": "book 绘本表&#xa; id PK&#xa;title&#xa;author&#xa;publisher&#xa;category&#xa;sub_category&#xa;difficulty_level&#xa;page_count&#xa;age_range&#xa;knowledge_type&#xa;art_style&#xa;theme&#xa;keywords&#xa;cover_url&#xa;description&#xa;vocabulary_count&#xa;read_count&#xa;status&#xa;create_time&#xa;update_time",
+      "type": "service",
+      "size": "xl"
+    },
+    {
+      "id": "ne_book_page",
+      "label": "book_page 绘本页面表&#xa; id PK&#xa; book_id FK&#xa;page_num&#xa;illustration&#xa;text&#xa;create_time",
+      "type": "service",
+      "size": "xl"
+    },
+    {
+      "id": "ne_reading_log",
+      "label": "reading_log 阅读日志表&#xa; id PK&#xa; child_id FK&#xa; book_id FK&#xa;start_time&#xa;end_time&#xa;duration&#xa;page_stay_times&#xa;page_turn_count&#xa;is_completed&#xa;completion_rate&#xa;avg_page_stay_time&#xa;focus_score&#xa;replay_count&#xa;bookmark_count&#xa;annotation_count&#xa;voice_record_count&#xa;emotion_data&#xa;create_time",
+      "type": "terminal",
+      "size": "xl"
+    },
+    {
+      "id": "ne_reading_bookmark",
+      "label": "reading_bookmark 收藏记录表&#xa; id PK&#xa; child_id FK&#xa; book_id FK&#xa;bookmark_type&#xa;note&#xa;create_time",
+      "type": "service",
+      "size": "xl"
+    },
+    {
+      "id": "ne_reading_annotation",
+      "label": "reading_annotation 批注记录表&#xa; id PK&#xa; child_id FK&#xa; book_id FK&#xa;page_num&#xa;annotation_type&#xa;content&#xa;position_x&#xa;position_y&#xa;create_time",
+      "type": "service",
+      "size": "xl"
+    },
+    {
+      "id": "ne_behavior_analysis",
+      "label": "behavior_analysis 行为分析表&#xa; id PK&#xa; child_id FK&#xa;reading_type&#xa;interest_tags&#xa;focus_score&#xa;avg_reading_duration&#xa;completion_rate&#xa;cognitive_stage&#xa;reading_ability_score&#xa;emotion_stability_score&#xa;growth_prediction_score&#xa;analysis_date&#xa;create_time&#xa;update_time",
+      "type": "output",
+      "size": "xl"
+    },
+    {
+      "id": "ne_growth_report",
+      "label": "growth_report 成长报告表&#xa; id PK&#xa; child_id FK&#xa;vocabulary_score&#xa;logic_score&#xa;reading_score&#xa;focus_score&#xa;total_score&#xa;report_type&#xa;report_date&#xa;suggestion&#xa;cognitive_score&#xa;social_score&#xa;creativity_score&#xa;habit_score&#xa;milestones&#xa;create_time",
+      "type": "document",
+      "size": "xl"
+    },
+    {
+      "id": "ne_recommendation",
+      "label": "recommendation 推荐记录表&#xa; id PK&#xa; child_id FK&#xa; book_id FK&#xa;recommend_type&#xa;recommend_score&#xa;reason&#xa;is_read&#xa;create_time",
+      "type": "terminal",
+      "size": "xl"
+    },
+    {
+      "id": "nr_manage",
+      "label": "管理",
+      "type": "decision",
+      "size": "small"
+    },
+    {
+      "id": "nr_parent",
+      "label": "所属家长",
+      "type": "decision",
+      "size": "small"
+    },
+    {
+      "id": "nr_class",
+      "label": "所属班级",
+      "type": "decision",
+      "size": "small"
+    },
+    {
+      "id": "nr_bookpage",
+      "label": "所属绘本",
+      "type": "decision",
+      "size": "small"
+    },
+    {
+      "id": "nr_log_child",
+      "label": "阅读儿童",
+      "type": "decision",
+      "size": "small"
+    },
+    {
+      "id": "nr_log_book",
+      "label": "阅读绘本",
+      "type": "decision",
+      "size": "small"
+    },
+    {
+      "id": "nr_bmk_child",
+      "label": "收藏",
+      "type": "decision",
+      "size": "small"
+    },
+    {
+      "id": "nr_bmk_book",
+      "label": "收藏绘本",
+      "type": "decision",
+      "size": "small"
+    },
+    {
+      "id": "nr_analysis",
+      "label": "分析",
+      "type": "decision",
+      "size": "small"
+    },
+    {
+      "id": "nr_report",
+      "label": "报告",
+      "type": "decision",
+      "size": "small"
+    },
+    {
+      "id": "ne1_1",
+      "label": "1",
+      "type": "service",
+      "size": "tiny"
+    },
+    {
+      "id": "ne1_n",
+      "label": "N",
+      "type": "service",
+      "size": "tiny"
+    },
+    {
+      "id": "ne2_1",
+      "label": "1",
+      "type": "service",
+      "size": "tiny"
+    },
+    {
+      "id": "ne2_n",
+      "label": "N",
+      "type": "service",
+      "size": "tiny"
+    },
+    {
+      "id": "ne3_1",
+      "label": "1",
+      "type": "service",
+      "size": "tiny"
+    },
+    {
+      "id": "ne3_n",
+      "label": "N",
+      "type": "service",
+      "size": "tiny"
+    },
+    {
+      "id": "ne4_1",
+      "label": "1",
+      "type": "service",
+      "size": "tiny"
+    },
+    {
+      "id": "ne4_n",
+      "label": "N",
+      "type": "service",
+      "size": "tiny"
+    },
+    {
+      "id": "ne5_1",
+      "label": "1",
+      "type": "service",
+      "size": "tiny"
+    },
+    {
+      "id": "ne5_n",
+      "label": "N",
+      "type": "service",
+      "size": "tiny"
+    },
+    {
+      "id": "ne6_1",
+      "label": "1",
+      "type": "service",
+      "size": "tiny"
+    },
+    {
+      "id": "ne6_n",
+      "label": "N",
+      "type": "service",
+      "size": "tiny"
+    },
+    {
+      "id": "ne7_1",
+      "label": "1",
+      "type": "service",
+      "size": "tiny"
+    },
+    {
+      "id": "ne7_n",
+      "label": "N",
+      "type": "service",
+      "size": "tiny"
+    },
+    {
+      "id": "ne8_1",
+      "label": "1",
+      "type": "service",
+      "size": "tiny"
+    },
+    {
+      "id": "ne8_n",
+      "label": "N",
+      "type": "service",
+      "size": "tiny"
+    },
+    {
+      "id": "ne9_1",
+      "label": "1",
+      "type": "service",
+      "size": "tiny"
+    },
+    {
+      "id": "ne9_n",
+      "label": "N",
+      "type": "service",
+      "size": "tiny"
+    },
+    {
+      "id": "ne10_1",
+      "label": "1",
+      "type": "service",
+      "size": "tiny"
+    },
+    {
+      "id": "ne10_n",
+      "label": "N",
+      "type": "service",
+      "size": "tiny"
+    },
+    {
+      "id": "nlegend_box",
+      "label": "nlegend_box",
+      "type": "terminal",
+      "size": "xl"
+    },
+    {
+      "id": "nlegend_title",
+      "label": "图例",
+      "type": "service",
+      "size": "tiny"
+    },
+    {
+      "id": "nlegend_entity",
+      "label": "nlegend_entity",
+      "type": "terminal",
+      "size": "tiny"
+    },
+    {
+      "id": "nlegend_entity_t",
+      "label": "实体（矩形框）",
+      "type": "service",
+      "size": "medium"
+    },
+    {
+      "id": "nlegend_rel",
+      "label": "nlegend_rel",
+      "type": "decision",
+      "size": "tiny"
+    },
+    {
+      "id": "nlegend_rel_t",
+      "label": "关系（菱形）",
+      "type": "service",
+      "size": "medium"
+    },
+    {
+      "id": "nlegend_line_t",
+      "label": "1:N 关系",
+      "type": "service",
+      "size": "medium"
+    },
+    {
+      "id": "nlegend_pk",
+      "label": "id",
+      "type": "service",
+      "size": "tiny"
+    },
+    {
+      "id": "nlegend_pk_t",
+      "label": "主键（下划线）",
+      "type": "service",
+      "size": "medium"
+    },
+    {
+      "id": "nlegend_fk",
+      "label": "fk",
+      "type": "service",
+      "size": "tiny"
+    },
+    {
+      "id": "nlegend_fk_t",
+      "label": "外键（粗体）",
+      "type": "service",
+      "size": "medium"
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-1",
+      "from": "ne_sys_user",
+      "to": "nr_manage",
+      "type": "bidirectional"
+    },
+    {
+      "id": "edge-2",
+      "from": "nr_manage",
+      "to": "ne_class_info",
+      "type": "bidirectional"
+    },
+    {
+      "id": "edge-3",
+      "from": "ne_sys_user",
+      "to": "nr_parent",
+      "type": "bidirectional"
+    },
+    {
+      "id": "edge-4",
+      "from": "nr_parent",
+      "to": "ne_child",
+      "type": "bidirectional"
+    },
+    {
+      "id": "edge-5",
+      "from": "ne_class_info",
+      "to": "nr_class",
+      "type": "bidirectional"
+    },
+    {
+      "id": "edge-6",
+      "from": "nr_class",
+      "to": "ne_child",
+      "type": "bidirectional"
+    },
+    {
+      "id": "edge-7",
+      "from": "ne_book",
+      "to": "nr_bookpage",
+      "type": "bidirectional"
+    },
+    {
+      "id": "edge-8",
+      "from": "nr_bookpage",
+      "to": "ne_book_page",
+      "type": "bidirectional"
+    },
+    {
+      "id": "edge-9",
+      "from": "ne_child",
+      "to": "nr_log_child",
+      "type": "bidirectional"
+    },
+    {
+      "id": "edge-10",
+      "from": "nr_log_child",
+      "to": "ne_reading_log",
+      "type": "bidirectional"
+    },
+    {
+      "id": "edge-11",
+      "from": "ne_book",
+      "to": "nr_log_book",
+      "type": "bidirectional"
+    },
+    {
+      "id": "edge-12",
+      "from": "nr_log_book",
+      "to": "ne_reading_log",
+      "type": "bidirectional"
+    },
+    {
+      "id": "edge-13",
+      "from": "ne_child",
+      "to": "nr_bmk_child",
+      "type": "bidirectional"
+    },
+    {
+      "id": "edge-14",
+      "from": "nr_bmk_child",
+      "to": "ne_reading_bookmark",
+      "type": "bidirectional"
+    },
+    {
+      "id": "edge-15",
+      "from": "ne_book",
+      "to": "nr_bmk_book",
+      "type": "bidirectional"
+    },
+    {
+      "id": "edge-16",
+      "from": "nr_bmk_book",
+      "to": "ne_reading_bookmark",
+      "type": "bidirectional"
+    },
+    {
+      "id": "edge-17",
+      "from": "ne_child",
+      "to": "nr_analysis",
+      "type": "bidirectional"
+    },
+    {
+      "id": "edge-18",
+      "from": "nr_analysis",
+      "to": "ne_behavior_analysis",
+      "type": "bidirectional"
+    },
+    {
+      "id": "edge-19",
+      "from": "ne_child",
+      "to": "nr_report",
+      "type": "bidirectional"
+    },
+    {
+      "id": "edge-20",
+      "from": "nr_report",
+      "to": "ne_growth_report",
+      "type": "bidirectional"
+    }
+  ],
+  "modules": []
+}

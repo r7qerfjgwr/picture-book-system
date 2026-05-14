@@ -145,3 +145,10 @@ export function getChildrenRanking(type = 'readingTime', limit = 10) {
     params: { type, limit }
   })
 }
+
+export function getBigscreenData() {
+  return request({
+    url: '/stats/bigscreen',
+    method: 'get'
+  })
+}

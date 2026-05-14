@@ -26,7 +26,7 @@
           <div class="search-item">
             <label>📖 绘本名称</label>
             <input
-              v-model="searchForm.title"
+              v-model="searchForm.keyword"
               type="text"
               placeholder="输入绘本名称搜索..."
               @keyup.enter="handleSearch"
@@ -36,19 +36,25 @@
             <label>📂 绘本类别</label>
             <select v-model="searchForm.category" @change="handleSearch">
               <option value="">全部类别</option>
-              <option value="animal">🐻 动物类</option>
-              <option value="science">🔬 科普类</option>
-              <option value="emotion">❤️ 情感类</option>
-              <option value="fairy_tale">🏰 童话类</option>
+              <option value="认知启蒙">🧒 认知启蒙</option>
+              <option value="情感培养">❤️ 情感培养</option>
+              <option value="生活习惯">🧴 生活习惯</option>
+              <option value="故事">🏰 故事</option>
+              <option value="科学探索">🔬 科学探索</option>
+              <option value="品格教育">🌟 品格教育</option>
+              <option value="社会交往">🤝 社会交往</option>
+              <option value="益智游戏">🧩 益智游戏</option>
+              <option value="艺术启蒙">🎨 艺术启蒙</option>
+              <option value="安全教育">🛡️ 安全教育</option>
             </select>
           </div>
           <div class="search-item">
             <label>📊 难度等级</label>
-            <select v-model="searchForm.difficulty" @change="handleSearch">
+            <select v-model="searchForm.difficultyLevel" @change="handleSearch">
               <option value="">全部难度</option>
-              <option value="easy">⭐ 简单</option>
-              <option value="medium">⭐⭐ 中等</option>
-              <option value="hard">⭐⭐⭐ 困难</option>
+              <option value="1">⭐ 简单</option>
+              <option value="2">⭐⭐ 中等</option>
+              <option value="3">⭐⭐⭐ 困难</option>
             </select>
           </div>
         </div>
@@ -111,13 +117,13 @@
                 <span class="author-name">✍️ {{ book.author }}</span>
               </td>
               <td>
-                <span class="category-badge" :class="book.category">
-                  {{ getCategoryName(book.category) }}
+                <span class="category-badge" :style="getCategoryStyle(book.category)">
+                  {{ getCategoryEmoji(book.category) }} {{ book.category }}
                 </span>
               </td>
               <td>
-                <span class="difficulty-badge" :class="book.difficulty">
-                  {{ getDifficultyLabel(book.difficulty) }}
+                <span class="difficulty-badge" :style="getDifficultyStyle(book.difficultyLevel)">
+                  {{ getDifficultyLabel(book.difficultyLevel) }}
                 </span>
               </td>
               <td>
@@ -160,7 +166,7 @@
           <div class="page-numbers">
             <span class="current-page">第 {{ pagination.page }} 页</span>
           </div>
-          <button class="page-btn" :disabled="books.length < pagination.size" @click="pagination.page++; loadBooks()">
+          <button class="page-btn" :disabled="pagination.page * pagination.size >= pagination.total" @click="pagination.page++; loadBooks()">
             下一页 ▶
           </button>
         </div>
@@ -186,29 +192,26 @@
             </div>
             <div class="form-item">
               <label>📂 主类别 <span class="required">*</span></label>
-              <select v-model="form.category" @change="handleCategoryChange">
+              <select v-model="form.category">
                 <option value="">请选择类别</option>
-                <option value="animal">🐻 动物类</option>
-                <option value="science">🔬 科普类</option>
-                <option value="emotion">❤️ 情感类</option>
-                <option value="fairy_tale">🏰 童话类</option>
-              </select>
-            </div>
-            <div class="form-item">
-              <label>📁 子类别</label>
-              <select v-model="form.subCategory">
-                <option value="">请选择子类别</option>
-                <option v-for="sub in subCategories" :key="sub.value" :value="sub.value">
-                  {{ sub.label }}
-                </option>
+                <option value="认知启蒙">🧒 认知启蒙</option>
+                <option value="情感培养">❤️ 情感培养</option>
+                <option value="生活习惯">🧴 生活习惯</option>
+                <option value="故事">🏰 故事</option>
+                <option value="科学探索">🔬 科学探索</option>
+                <option value="品格教育">🌟 品格教育</option>
+                <option value="社会交往">🤝 社会交往</option>
+                <option value="益智游戏">🧩 益智游戏</option>
+                <option value="艺术启蒙">🎨 艺术启蒙</option>
+                <option value="安全教育">🛡️ 安全教育</option>
               </select>
             </div>
             <div class="form-item">
               <label>📊 难度等级 <span class="required">*</span></label>
-              <select v-model="form.difficulty">
-                <option value="easy">⭐ 简单</option>
-                <option value="medium">⭐⭐ 中等</option>
-                <option value="hard">⭐⭐⭐ 困难</option>
+              <select v-model="form.difficultyLevel">
+                <option :value="1">⭐ 简单</option>
+                <option :value="2">⭐⭐ 中等</option>
+                <option :value="3">⭐⭐⭐ 困难</option>
               </select>
             </div>
             <div class="form-item">
@@ -233,7 +236,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { getBookList, createBook, updateBook, deleteBook as deleteBookApi, uploadBooks } from '@/api/book'
 
@@ -243,9 +246,9 @@ const dialogVisible = ref(false)
 const isEdit = ref(false)
 
 const searchForm = reactive({
-  title: '',
+  keyword: '',
   category: '',
-  difficulty: ''
+  difficultyLevel: ''
 })
 
 const pagination = reactive({
@@ -259,74 +262,77 @@ const form = reactive({
   title: '',
   author: '',
   category: '',
-  subCategory: '',
-  difficulty: 'easy',
+  difficultyLevel: 1,
   pageCount: 20,
   description: ''
 })
 
-const subCategoryMap = {
-  animal: [
-    { label: '陆地动物', value: 'land' },
-    { label: '海洋动物', value: 'ocean' },
-    { label: '飞行动物', value: 'flying' }
-  ],
-  science: [
-    { label: '自然科学', value: 'natural' },
-    { label: '生活常识', value: 'life' },
-    { label: '安全知识', value: 'safety' }
-  ],
-  emotion: [
-    { label: '亲情', value: 'family' },
-    { label: '友情', value: 'friendship' },
-    { label: '情绪管理', value: 'emotion_manage' }
-  ],
-  fairy_tale: [
-    { label: '经典童话', value: 'classic' },
-    { label: '现代童话', value: 'modern' },
-    { label: '寓言故事', value: 'fable' }
-  ]
-}
-
-const subCategories = computed(() => subCategoryMap[form.category] || [])
-
 const getCategoryEmoji = (category) => {
-  const emojis = { animal: '🐻', science: '🔬', emotion: '❤️', fairy_tale: '🏰' }
+  const emojis = {
+    '认知启蒙': '🧒', '情感培养': '❤️', '生活习惯': '🧴', '故事': '🏰',
+    '科学探索': '🔬', '品格教育': '🌟', '社会交往': '🤝', '益智游戏': '🧩',
+    '艺术启蒙': '🎨', '安全教育': '🛡️'
+  }
   return emojis[category] || '📖'
 }
 
-const getCategoryName = (category) => {
-  const names = { animal: '动物类', science: '科普类', emotion: '情感类', fairy_tale: '童话类' }
-  return names[category] || category
+const getCategoryStyle = (category) => {
+  const styles = {
+    '认知启蒙': { background: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)', color: '#d63031' },
+    '情感培养': { background: 'linear-gradient(135deg, #ffeaa7 0%, #ffb88c 100%)', color: '#e17055' },
+    '生活习惯': { background: 'linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%)', color: '#00b894' },
+    '故事': { background: 'linear-gradient(135deg, #f5e6d3 0%, #d4a574 100%)', color: '#6d4c41' },
+    '科学探索': { background: 'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)', color: '#0984e3' },
+    '品格教育': { background: 'linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%)', color: '#6c5ce7' },
+    '社会交往': { background: 'linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%)', color: '#0984e3' },
+    '益智游戏': { background: 'linear-gradient(135deg, #fddb92 0%, #d1fdff 100%)', color: '#fdcb6e' },
+    '艺术启蒙': { background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', color: '#e84393' },
+    '安全教育': { background: 'linear-gradient(135deg, #fccb90 0%, #d57eeb 100%)', color: '#6c5ce7' }
+  }
+  return styles[category] || { background: 'linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%)', color: '#2d3436' }
 }
 
 const getCoverStyle = (category) => {
   const gradients = {
-    animal: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)',
-    science: 'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)',
-    emotion: 'linear-gradient(135deg, #ffeaa7 0%, #ffb88c 100%)',
-    fairy_tale: 'linear-gradient(135deg, #f5e6d3 0%, #d4a574 100%)'
+    '认知启蒙': 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)',
+    '情感培养': 'linear-gradient(135deg, #ffeaa7 0%, #ffb88c 100%)',
+    '生活习惯': 'linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%)',
+    '故事': 'linear-gradient(135deg, #f5e6d3 0%, #d4a574 100%)',
+    '科学探索': 'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)',
+    '品格教育': 'linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%)',
+    '社会交往': 'linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%)',
+    '益智游戏': 'linear-gradient(135deg, #fddb92 0%, #d1fdff 100%)',
+    '艺术启蒙': 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+    '安全教育': 'linear-gradient(135deg, #fccb90 0%, #d57eeb 100%)'
   }
   return { background: gradients[category] || 'linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%)' }
 }
 
-const getDifficultyLabel = (difficulty) => {
-  const labels = { easy: '⭐ 简单', medium: '⭐⭐ 中等', hard: '⭐⭐⭐ 困难' }
-  return labels[difficulty] || difficulty
+const getDifficultyLabel = (level) => {
+  const labels = { 1: '⭐ 简单', 2: '⭐⭐ 中等', 3: '⭐⭐⭐ 困难' }
+  return labels[level] || `⭐ ${level}`
 }
 
-const handleCategoryChange = () => {
-  form.subCategory = ''
+const getDifficultyStyle = (level) => {
+  const styles = {
+    1: { background: 'rgba(29, 209, 161, 0.15)', color: '#00b894' },
+    2: { background: 'rgba(255, 159, 67, 0.15)', color: '#ff9f43' },
+    3: { background: 'rgba(255, 107, 107, 0.15)', color: '#ff6b6b' }
+  }
+  return styles[level] || { background: 'rgba(0,0,0,0.05)', color: '#6d4c41' }
 }
 
 const loadBooks = async () => {
   loading.value = true
   try {
-    const res = await getBookList({
-      page: pagination.page,
+    const params = {
+      current: pagination.page,
       size: pagination.size,
-      ...searchForm
-    })
+      keyword: searchForm.keyword || undefined,
+      category: searchForm.category || undefined,
+      difficultyLevel: searchForm.difficultyLevel || undefined
+    }
+    const res = await getBookList(params)
     books.value = res.data?.records || []
     pagination.total = res.data?.total || 0
   } catch (error) {
@@ -345,9 +351,9 @@ const handleSearch = () => {
 }
 
 const resetSearch = () => {
-  searchForm.title = ''
+  searchForm.keyword = ''
   searchForm.category = ''
-  searchForm.difficulty = ''
+  searchForm.difficultyLevel = ''
   handleSearch()
 }
 
@@ -358,8 +364,7 @@ const showAddDialog = () => {
     title: '',
     author: '',
     category: '',
-    subCategory: '',
-    difficulty: 'easy',
+    difficultyLevel: 1,
     pageCount: 20,
     description: ''
   })
@@ -744,46 +749,11 @@ onMounted(() => {
   font-weight: 700;
 }
 
-.category-badge.animal {
-  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-  color: #d63031;
-}
-
-.category-badge.science {
-  background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
-  color: #0984e3;
-}
-
-.category-badge.emotion {
-  background: linear-gradient(135deg, #ffeaa7 0%, #ffb88c 100%);
-  color: #e17055;
-}
-
-.category-badge.fairy_tale {
-  background: linear-gradient(135deg, #f5e6d3 0%, #d4a574 100%);
-  color: #6d4c41;
-}
-
 .difficulty-badge {
   padding: 4px 10px;
   border-radius: 8px;
   font-size: 11px;
   font-weight: 700;
-}
-
-.difficulty-badge.easy {
-  background: rgba(29, 209, 161, 0.15);
-  color: #00b894;
-}
-
-.difficulty-badge.medium {
-  background: rgba(255, 159, 67, 0.15);
-  color: #ff9f43;
-}
-
-.difficulty-badge.hard {
-  background: rgba(255, 107, 107, 0.15);
-  color: #ff6b6b;
 }
 
 .page-count,

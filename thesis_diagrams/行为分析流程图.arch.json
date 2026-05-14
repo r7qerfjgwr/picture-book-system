@@ -1,0 +1,156 @@
+{
+  "version": 1,
+  "title": "阅读行为分析流程图",
+  "type": "academic-diagram",
+  "source": "generated",
+  "profile": "academic-paper",
+  "theme": "academic",
+  "layout": "vertical",
+  "counts": {
+    "nodes": 13,
+    "edges": 12,
+    "modules": 0
+  },
+  "nodes": [
+    {
+      "id": "start",
+      "label": "开始",
+      "type": "terminal"
+    },
+    {
+      "id": "collect",
+      "label": "采集阅读行为数据\\n阅读时长、翻页速度、重复阅读、互动行为",
+      "type": "service"
+    },
+    {
+      "id": "preprocess",
+      "label": "数据预处理\\n数据清洗、归一化、特征提取",
+      "type": "service"
+    },
+    {
+      "id": "feature_box",
+      "label": "多维度特征计算",
+      "type": "service"
+    },
+    {
+      "id": "focus",
+      "label": "专注度评分",
+      "type": "service"
+    },
+    {
+      "id": "page_speed",
+      "label": "翻页速度",
+      "type": "service"
+    },
+    {
+      "id": "complete",
+      "label": "完成率",
+      "type": "service"
+    },
+    {
+      "id": "repeat",
+      "label": "重复偏好",
+      "type": "service"
+    },
+    {
+      "id": "interact",
+      "label": "互动得分",
+      "type": "service"
+    },
+    {
+      "id": "emotion",
+      "label": "情绪稳定性",
+      "type": "service"
+    },
+    {
+      "id": "classify",
+      "label": "阅读类型分类\\n专注型 / 兴趣导向型 / 跳跃型",
+      "type": "decision"
+    },
+    {
+      "id": "report",
+      "label": "生成行为分析报告\\n能力评估、兴趣分析、改进建议",
+      "type": "service"
+    },
+    {
+      "id": "end",
+      "label": "结束",
+      "type": "terminal"
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-1",
+      "from": "start",
+      "to": "collect",
+      "type": "primary"
+    },
+    {
+      "id": "edge-2",
+      "from": "collect",
+      "to": "preprocess",
+      "type": "primary"
+    },
+    {
+      "id": "edge-3",
+      "from": "preprocess",
+      "to": "feature_box",
+      "type": "primary"
+    },
+    {
+      "id": "edge-4",
+      "from": "feature_box",
+      "to": "focus",
+      "type": "data"
+    },
+    {
+      "id": "edge-5",
+      "from": "feature_box",
+      "to": "page_speed",
+      "type": "data"
+    },
+    {
+      "id": "edge-6",
+      "from": "feature_box",
+      "to": "complete",
+      "type": "data"
+    },
+    {
+      "id": "edge-7",
+      "from": "feature_box",
+      "to": "repeat",
+      "type": "data"
+    },
+    {
+      "id": "edge-8",
+      "from": "feature_box",
+      "to": "interact",
+      "type": "data"
+    },
+    {
+      "id": "edge-9",
+      "from": "feature_box",
+      "to": "emotion",
+      "type": "data"
+    },
+    {
+      "id": "edge-10",
+      "from": "feature_box",
+      "to": "classify",
+      "type": "primary"
+    },
+    {
+      "id": "edge-11",
+      "from": "classify",
+      "to": "report",
+      "type": "primary"
+    },
+    {
+      "id": "edge-12",
+      "from": "report",
+      "to": "end",
+      "type": "primary"
+    }
+  ],
+  "modules": []
+}

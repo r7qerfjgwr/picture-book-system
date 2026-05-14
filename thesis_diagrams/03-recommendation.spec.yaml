@@ -1,0 +1,114 @@
+meta:
+  profile: academic-paper
+  figureType: workflow
+  theme: academic
+  layout: vertical
+  title: "绘本推荐算法流程图"
+  description: "多策略融合推荐算法执行流程"
+
+nodes:
+  # 开始
+  - id: start
+    label: 开始
+    type: terminal
+    position: { x: 260, y: 40 }
+
+  # 获取儿童信息
+  - id: get_info
+    label: 获取儿童基本信息\n(年龄、阅读类型、兴趣标签)
+    type: service
+    position: { x: 180, y: 120 }
+
+  # 并行处理框
+  - id: parallel_box
+    label: 多策略并行计算
+    type: service
+    position: { x: 180, y: 220 }
+
+  # 四个策略
+  - id: content_rec
+    label: 内容推荐\n基于兴趣标签匹配\n绘本特征向量
+    type: service
+    position: { x: 40, y: 340 }
+  - id: collaborative
+    label: 协同过滤\n基于同龄儿童\n阅读行为相似度
+    type: service
+    position: { x: 160, y: 340 }
+  - id: age_rec
+    label: 年龄推荐\n基于年龄段\n匹配适读绘本
+    type: service
+    position: { x: 280, y: 340 }
+  - id: difficulty
+    label: 难度匹配\n基于阅读能力\n匹配合适难度
+    type: service
+    position: { x: 400, y: 340 }
+
+  # 汇总
+  - id: merge
+    label: 加权融合各策略得分\n计算综合推荐评分
+    type: service
+    position: { x: 180, y: 480 }
+
+  # 排序筛选
+  - id: sort
+    label: 按评分排序\n筛选Top-N绘本
+    type: service
+    position: { x: 180, y: 580 }
+
+  # 输出
+  - id: output
+    label: 生成个性化推荐列表
+    type: service
+    position: { x: 180, y: 680 }
+
+  # 结束
+  - id: end
+    label: 结束
+    type: terminal
+    position: { x: 260, y: 780 }
+
+edges:
+  - from: start
+    to: get_info
+    type: primary
+  - from: get_info
+    to: parallel_box
+    type: primary
+
+  # 分叉到四个策略
+  - from: parallel_box
+    to: content_rec
+    type: primary
+  - from: parallel_box
+    to: collaborative
+    type: primary
+  - from: parallel_box
+    to: age_rec
+    type: primary
+  - from: parallel_box
+    to: difficulty
+    type: primary
+
+  # 汇聚到合并
+  - from: content_rec
+    to: merge
+    type: primary
+  - from: collaborative
+    to: merge
+    type: primary
+  - from: age_rec
+    to: merge
+    type: primary
+  - from: difficulty
+    to: merge
+    type: primary
+
+  - from: merge
+    to: sort
+    type: primary
+  - from: sort
+    to: output
+    type: primary
+  - from: output
+    to: end
+    type: primary

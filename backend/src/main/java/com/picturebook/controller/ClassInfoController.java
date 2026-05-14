@@ -28,12 +28,24 @@ public class ClassInfoController {
     @Operation(summary = "获取班级列表")
     @GetMapping("/list")
     public Result<Page<ClassInfo>> getClassList(PageDTO dto) {
+        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
+        // 教师只能看自己的班级
+        if ("TEACHER".equals(loginUser.getRoleKey())) {
+            return Result.success(classInfoService.getClassListByTeacher(dto, loginUser.getUserId()));
+        }
         return Result.success(classInfoService.getClassList(dto));
     }
 
     @Operation(summary = "获取所有班级")
     @GetMapping("/all")
     public Result<List<ClassInfo>> getAllClasses() {
+        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
+        // 教师只能看自己的班级
+        if ("TEACHER".equals(loginUser.getRoleKey())) {
+            return Result.success(classInfoService.getClassesByTeacherId(loginUser.getUserId()));
+        }
         return Result.success(classInfoService.getAllClasses());
     }
 

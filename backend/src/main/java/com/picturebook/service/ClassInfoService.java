@@ -10,6 +10,8 @@ public interface ClassInfoService {
 
     Page<ClassInfo> getClassList(PageDTO dto);
 
+    Page<ClassInfo> getClassListByTeacher(PageDTO dto, Long teacherId);
+
     ClassInfo getClassById(Long id);
 
     List<ClassInfo> getAllClasses();

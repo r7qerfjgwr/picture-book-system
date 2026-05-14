@@ -1,0 +1,350 @@
+<mxfile host="app.diagrams.net" modified="2026-05-13" agent="drawio-skill" version="21.0.0">
+  <diagram id="er-chen" name="系统数据库ER图">
+    <mxGraphModel dx="2600" dy="1600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2800" pageHeight="1800" background="#FFFFFF">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- ===== Zone backgrounds ===== -->
+        <mxCell id="zone1" value="用户管理" style="rounded=1;whiteSpace=wrap;fillColor=#DAE8FC;strokeColor=#6c8ebf;opacity=30;fontSize=13;fontStyle=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="30" y="80" width="280" height="580" as="geometry"/>
+        </mxCell>
+        <mxCell id="zone2" value="班级与儿童" style="rounded=1;whiteSpace=wrap;fillColor=#D5E8D4;strokeColor=#82b366;opacity=30;fontSize=13;fontStyle=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="380" y="80" width="300" height="580" as="geometry"/>
+        </mxCell>
+        <mxCell id="zone3" value="绘本管理" style="rounded=1;whiteSpace=wrap;fillColor=#FFF2CC;strokeColor=#d6b656;opacity=30;fontSize=13;fontStyle=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="750" y="80" width="280" height="580" as="geometry"/>
+        </mxCell>
+        <mxCell id="zone4" value="阅读行为" style="rounded=1;whiteSpace=wrap;fillColor=#E1D5E7;strokeColor=#9673a6;opacity=30;fontSize=13;fontStyle=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="80" width="340" height="580" as="geometry"/>
+        </mxCell>
+        <mxCell id="zone5" value="分析与成长" style="rounded=1;whiteSpace=wrap;fillColor=#F8CECC;strokeColor=#b85450;opacity=30;fontSize=13;fontStyle=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="1510" y="80" width="300" height="580" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== ENTITY: sys_user ===== -->
+        <mxCell id="e_sys_user" value="&lt;b&gt;sys_user&lt;/b&gt; 用户表&#xa;&lt;hr&gt;&lt;u&gt;id&lt;/u&gt;  PK&#xa;&lt;b&gt;role_id&lt;/b&gt;  FK&#xa;username  UK&#xa;password&#xa;real_name&#xa;phone&#xa;email&#xa;status&#xa;avatar&#xa;login_fail_count&#xa;last_login_time&#xa;create_time&#xa;update_time" style="shape=rectangle;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#6c8ebf;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=8;spacingTop=2;fontSize=11;overflow=fill;" vertex="1" parent="1">
+          <mxGeometry x="60" y="230" width="200" height="230" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== ENTITY: class_info ===== -->
+        <mxCell id="e_class_info" value="&lt;b&gt;class_info&lt;/b&gt; 班级表&#xa;&lt;hr&gt;&lt;u&gt;id&lt;/u&gt;  PK&#xa;&lt;b&gt;teacher_id&lt;/b&gt;  FK&#xa;class_name&#xa;institution_name&#xa;student_count&#xa;description&#xa;create_time&#xa;update_time" style="shape=rectangle;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#82b366;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=8;spacingTop=2;fontSize=11;overflow=fill;" vertex="1" parent="1">
+          <mxGeometry x="400" y="110" width="200" height="180" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== ENTITY: child ===== -->
+        <mxCell id="e_child" value="&lt;b&gt;child&lt;/b&gt; 儿童表&#xa;&lt;hr&gt;&lt;u&gt;id&lt;/u&gt;  PK&#xa;&lt;b&gt;parent_id&lt;/b&gt;  FK&#xa;&lt;b&gt;class_id&lt;/b&gt;  FK&#xa;name&#xa;birth_date&#xa;gender&#xa;avatar&#xa;reading_type&#xa;interest_tags&#xa;focus_score&#xa;cognitive_stage&#xa;reading_ability_score&#xa;milestone&#xa;create_time&#xa;update_time" style="shape=rectangle;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#82b366;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=8;spacingTop=2;fontSize=11;overflow=fill;" vertex="1" parent="1">
+          <mxGeometry x="400" y="380" width="200" height="260" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== ENTITY: book ===== -->
+        <mxCell id="e_book" value="&lt;b&gt;book&lt;/b&gt; 绘本表&#xa;&lt;hr&gt;&lt;u&gt;id&lt;/u&gt;  PK&#xa;title&#xa;author&#xa;publisher&#xa;category&#xa;sub_category&#xa;difficulty_level&#xa;page_count&#xa;age_range&#xa;knowledge_type&#xa;art_style&#xa;theme&#xa;keywords&#xa;cover_url&#xa;description&#xa;vocabulary_count&#xa;read_count&#xa;status&#xa;create_time&#xa;update_time" style="shape=rectangle;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#d6b656;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=8;spacingTop=2;fontSize=11;overflow=fill;" vertex="1" parent="1">
+          <mxGeometry x="770" y="230" width="200" height="340" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== ENTITY: book_page ===== -->
+        <mxCell id="e_book_page" value="&lt;b&gt;book_page&lt;/b&gt; 绘本页面表&#xa;&lt;hr&gt;&lt;u&gt;id&lt;/u&gt;  PK&#xa;&lt;b&gt;book_id&lt;/b&gt;  FK&#xa;page_num&#xa;illustration&#xa;text&#xa;create_time" style="shape=rectangle;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#d6b656;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=8;spacingTop=2;fontSize=11;overflow=fill;" vertex="1" parent="1">
+          <mxGeometry x="770" y="110" width="200" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== ENTITY: reading_log ===== -->
+        <mxCell id="e_reading_log" value="&lt;b&gt;reading_log&lt;/b&gt; 阅读日志表&#xa;&lt;hr&gt;&lt;u&gt;id&lt;/u&gt;  PK&#xa;&lt;b&gt;child_id&lt;/b&gt;  FK&#xa;&lt;b&gt;book_id&lt;/b&gt;  FK&#xa;start_time&#xa;end_time&#xa;duration&#xa;page_stay_times&#xa;page_turn_count&#xa;is_completed&#xa;completion_rate&#xa;avg_page_stay_time&#xa;focus_score&#xa;replay_count&#xa;bookmark_count&#xa;annotation_count&#xa;voice_record_count&#xa;emotion_data&#xa;create_time" style="shape=rectangle;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#9673a6;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=8;spacingTop=2;fontSize=11;overflow=fill;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="110" width="200" height="290" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== ENTITY: reading_bookmark ===== -->
+        <mxCell id="e_reading_bookmark" value="&lt;b&gt;reading_bookmark&lt;/b&gt; 收藏记录表&#xa;&lt;hr&gt;&lt;u&gt;id&lt;/u&gt;  PK&#xa;&lt;b&gt;child_id&lt;/b&gt;  FK&#xa;&lt;b&gt;book_id&lt;/b&gt;  FK&#xa;bookmark_type&#xa;note&#xa;create_time" style="shape=rectangle;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#9673a6;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=8;spacingTop=2;fontSize=11;overflow=fill;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="440" width="200" height="120" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== ENTITY: reading_annotation ===== -->
+        <mxCell id="e_reading_annotation" value="&lt;b&gt;reading_annotation&lt;/b&gt; 批注记录表&#xa;&lt;hr&gt;&lt;u&gt;id&lt;/u&gt;  PK&#xa;&lt;b&gt;child_id&lt;/b&gt;  FK&#xa;&lt;b&gt;book_id&lt;/b&gt;  FK&#xa;page_num&#xa;annotation_type&#xa;content&#xa;position_x&#xa;position_y&#xa;create_time" style="shape=rectangle;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#9673a6;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=8;spacingTop=2;fontSize=11;overflow=fill;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="580" width="200" height="140" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== ENTITY: behavior_analysis ===== -->
+        <mxCell id="e_behavior_analysis" value="&lt;b&gt;behavior_analysis&lt;/b&gt; 行为分析表&#xa;&lt;hr&gt;&lt;u&gt;id&lt;/u&gt;  PK&#xa;&lt;b&gt;child_id&lt;/b&gt;  FK&#xa;reading_type&#xa;interest_tags&#xa;focus_score&#xa;avg_reading_duration&#xa;completion_rate&#xa;cognitive_stage&#xa;reading_ability_score&#xa;emotion_stability_score&#xa;growth_prediction_score&#xa;analysis_date&#xa;create_time&#xa;update_time" style="shape=rectangle;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#b85450;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=8;spacingTop=2;fontSize=11;overflow=fill;" vertex="1" parent="1">
+          <mxGeometry x="1540" y="110" width="200" height="230" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== ENTITY: growth_report ===== -->
+        <mxCell id="e_growth_report" value="&lt;b&gt;growth_report&lt;/b&gt; 成长报告表&#xa;&lt;hr&gt;&lt;u&gt;id&lt;/u&gt;  PK&#xa;&lt;b&gt;child_id&lt;/b&gt;  FK&#xa;vocabulary_score&#xa;logic_score&#xa;reading_score&#xa;focus_score&#xa;total_score&#xa;report_type&#xa;report_date&#xa;suggestion&#xa;cognitive_score&#xa;social_score&#xa;creativity_score&#xa;habit_score&#xa;milestones&#xa;create_time" style="shape=rectangle;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#b85450;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=8;spacingTop=2;fontSize=11;overflow=fill;" vertex="1" parent="1">
+          <mxGeometry x="1540" y="380" width="200" height="260" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== ENTITY: recommendation ===== -->
+        <mxCell id="e_recommendation" value="&lt;b&gt;recommendation&lt;/b&gt; 推荐记录表&#xa;&lt;hr&gt;&lt;u&gt;id&lt;/u&gt;  PK&#xa;&lt;b&gt;child_id&lt;/b&gt;  FK&#xa;&lt;b&gt;book_id&lt;/b&gt;  FK&#xa;recommend_type&#xa;recommend_score&#xa;reason&#xa;is_read&#xa;create_time" style="shape=rectangle;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#b85450;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=8;spacingTop=2;fontSize=11;overflow=fill;" vertex="1" parent="1">
+          <mxGeometry x="1540" y="670" width="200" height="140" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== RELATIONSHIP DIAMONDS ===== -->
+
+        <!-- R1: class_info N:1 sys_user (管理) -->
+        <mxCell id="r_manage" value="管理" style="rhombus;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#333333;strokeWidth=1.5;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="290" y="160" width="90" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- R2: child N:1 sys_user (所属家长) -->
+        <mxCell id="r_parent" value="所属家长" style="rhombus;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#333333;strokeWidth=1.5;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="290" y="420" width="90" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- R3: child N:1 class_info (所属班级) -->
+        <mxCell id="r_class" value="所属班级" style="rhombus;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#333333;strokeWidth=1.5;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="290" width="90" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- R4: book_page N:1 book (所属绘本) -->
+        <mxCell id="r_bookpage" value="所属绘本" style="rhombus;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#333333;strokeWidth=1.5;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="840" y="160" width="90" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- R5: reading_log N:1 child (阅读儿童) -->
+        <mxCell id="r_log_child" value="阅读儿童" style="rhombus;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#333333;strokeWidth=1.5;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="770" y="560" width="90" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- R6: reading_log N:1 book (阅读绘本) -->
+        <mxCell id="r_log_book" value="阅读绘本" style="rhombus;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#333333;strokeWidth=1.5;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="160" width="90" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- R7: reading_bookmark N:1 child (收藏) -->
+        <mxCell id="r_bmk_child" value="收藏" style="rhombus;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#333333;strokeWidth=1.5;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="770" y="660" width="90" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- R8: reading_bookmark N:1 book (收藏绘本) -->
+        <mxCell id="r_bmk_book" value="收藏绘本" style="rhombus;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#333333;strokeWidth=1.5;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="480" width="90" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- R9: behavior_analysis N:1 child (分析) -->
+        <mxCell id="r_analysis" value="分析" style="rhombus;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#333333;strokeWidth=1.5;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1370" y="420" width="90" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- R10: growth_report N:1 child (报告) -->
+        <mxCell id="r_report" value="报告" style="rhombus;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#333333;strokeWidth=1.5;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1370" y="520" width="90" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== EDGES ===== -->
+
+        <!-- E1: sys_user 1 --- 管理 N class_info -->
+        <mxCell id="e1" style="endArrow=none;strokeColor=#333333;strokeWidth=1.5;fontSize=12;fontStyle=1;" edge="1" parent="1" source="e_sys_user" target="r_manage">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1_1" value="1" style="text;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="275" y="188" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1_n" value="N" style="text;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="370" y="188" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1b" style="endArrow=none;strokeColor=#333333;strokeWidth=1.5;" edge="1" parent="1" source="r_manage" target="e_class_info">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- E2: sys_user 1 --- 所属家长 N child -->
+        <mxCell id="e2" style="endArrow=none;strokeColor=#333333;strokeWidth=1.5;fontSize=12;fontStyle=1;" edge="1" parent="1" source="e_sys_user" target="r_parent">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2_1" value="1" style="text;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="275" y="448" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2_n" value="N" style="text;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="370" y="448" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2b" style="endArrow=none;strokeColor=#333333;strokeWidth=1.5;" edge="1" parent="1" source="r_parent" target="e_child">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- E3: class_info 1 --- 所属班级 N child -->
+        <mxCell id="e3" style="endArrow=none;strokeColor=#333333;strokeWidth=1.5;" edge="1" parent="1" source="e_class_info" target="r_class">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3_1" value="1" style="text;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="475" y="270" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3_n" value="N" style="text;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="475" y="350" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3b" style="endArrow=none;strokeColor=#333333;strokeWidth=1.5;" edge="1" parent="1" source="r_class" target="e_child">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- E4: book 1 --- 所属绘本 N book_page -->
+        <mxCell id="e4" style="endArrow=none;strokeColor=#333333;strokeWidth=1.5;" edge="1" parent="1" source="e_book" target="r_bookpage">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e4_1" value="1" style="text;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="860" y="225" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="e4_n" value="N" style="text;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="860" y="150" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="e4b" style="endArrow=none;strokeColor=#333333;strokeWidth=1.5;" edge="1" parent="1" source="r_bookpage" target="e_book_page">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- E5: child 1 --- 阅读儿童 N reading_log -->
+        <mxCell id="e5" style="endArrow=none;strokeColor=#333333;strokeWidth=1.5;" edge="1" parent="1" source="e_child" target="r_log_child">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e5_1" value="1" style="text;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="620" y="580" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="e5_n" value="N" style="text;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="750" y="580" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="e5b" style="endArrow=none;strokeColor=#333333;strokeWidth=1.5;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="r_log_child" target="e_reading_log">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="970" y="255" as="targetPoint"/>
+            <Array as="points">
+              <mxPoint x="970" y="590"/>
+              <mxPoint x="970" y="255"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- E6: book 1 --- 阅读绘本 N reading_log -->
+        <mxCell id="e6" style="endArrow=none;strokeColor=#333333;strokeWidth=1.5;" edge="1" parent="1" source="e_book" target="r_log_book">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e6_1" value="1" style="text;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="990" y="190" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="e6_n" value="N" style="text;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="220" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="e6b" style="endArrow=none;strokeColor=#333333;strokeWidth=1.5;" edge="1" parent="1" source="r_log_book" target="e_reading_log">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- E7: child 1 --- 收藏 N reading_bookmark -->
+        <mxCell id="e7" style="endArrow=none;strokeColor=#333333;strokeWidth=1.5;" edge="1" parent="1" source="e_child" target="r_bmk_child">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e7_1" value="1" style="text;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="620" y="650" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="e7_n" value="N" style="text;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="750" y="680" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="e7b" style="endArrow=none;strokeColor=#333333;strokeWidth=1.5;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="r_bmk_child" target="e_reading_bookmark">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="970" y="500" as="targetPoint"/>
+            <Array as="points">
+              <mxPoint x="970" y="690"/>
+              <mxPoint x="970" y="500"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- E8: book 1 --- 收藏绘本 N reading_bookmark -->
+        <mxCell id="e8" style="endArrow=none;strokeColor=#333333;strokeWidth=1.5;" edge="1" parent="1" source="e_book" target="r_bmk_book">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e8_1" value="1" style="text;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="990" y="490" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="e8_n" value="N" style="text;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="540" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="e8b" style="endArrow=none;strokeColor=#333333;strokeWidth=1.5;" edge="1" parent="1" source="r_bmk_book" target="e_reading_bookmark">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- E9: child 1 --- 分析 N behavior_analysis -->
+        <mxCell id="e9" style="endArrow=none;strokeColor=#333333;strokeWidth=1.5;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="e_child" target="r_analysis">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="700" y="510"/>
+              <mxPoint x="700" y="450"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e9_1" value="1" style="text;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="710" y="435" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="e9_n" value="N" style="text;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1350" y="435" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="e9b" style="endArrow=none;strokeColor=#333333;strokeWidth=1.5;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="r_analysis" target="e_behavior_analysis">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1460" y="450"/>
+              <mxPoint x="1460" y="225"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- E10: child 1 --- 报告 N growth_report -->
+        <mxCell id="e10" style="endArrow=none;strokeColor=#333333;strokeWidth=1.5;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="e_child" target="r_report">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="510"/>
+              <mxPoint x="720" y="550"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e10_1" value="1" style="text;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="730" y="540" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="e10_n" value="N" style="text;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1350" y="540" width="20" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="e10b" style="endArrow=none;strokeColor=#333333;strokeWidth=1.5;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="r_report" target="e_growth_report">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1460" y="550"/>
+              <mxPoint x="1460" y="510"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ===== LEGEND ===== -->
+        <mxCell id="legend_box" value="" style="rounded=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#666666;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="1540" y="830" width="220" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend_title" value="图例" style="text;align=center;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1620" y="835" width="60" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend_entity" value="" style="shape=rectangle;fillColor=#FFFFFF;strokeColor=#333333;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1560" y="870" width="30" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend_entity_t" value="实体（矩形框）" style="text;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1600" y="870" width="120" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend_rel" value="" style="rhombus;fillColor=#FFFFFF;strokeColor=#333333;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="1560" y="900" width="30" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend_rel_t" value="关系（菱形）" style="text;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1600" y="900" width="120" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend_line" value="" style="endArrow=none;strokeColor=#333333;strokeWidth=1.5;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1560" y="940" as="sourcePoint"/>
+            <mxPoint x="1590" y="940" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend_line_t" value="1:N 关系" style="text;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1600" y="930" width="120" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend_pk" value="&lt;u&gt;id&lt;/u&gt;" style="text;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1560" y="955" width="30" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend_pk_t" value="主键（下划线）" style="text;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1600" y="955" width="120" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend_fk" value="&lt;b&gt;fk&lt;/b&gt;" style="text;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1560" y="975" width="30" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend_fk_t" value="外键（粗体）" style="text;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1600" y="975" width="120" height="20" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

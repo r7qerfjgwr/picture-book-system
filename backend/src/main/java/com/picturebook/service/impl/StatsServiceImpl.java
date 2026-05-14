@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -116,20 +117,52 @@ public class StatsServiceImpl implements StatsService {
     public List<Map<String, Object>> getAgeDistribution() {
         List<Map<String, Object>> result = new ArrayList<>();
 
-        // 定义年龄段
-        String[] ageRanges = {"3-4岁", "4-5岁", "5-6岁"};
-        for (String range : ageRanges) {
-            Long count = bookMapper.selectCount(new QueryWrapper<Book>()
-                    .eq("status", 1)
-                    .eq("age_range", range));
+        // 获取所有儿童
+        List<Child> children = childMapper.selectList(new QueryWrapper<Child>());
+        LocalDate today = LocalDate.now();
 
-            Map<String, Object> item = new HashMap<>();
-            item.put("name", range);
-            item.put("value", count);
-            result.add(item);
+        // 统计各年龄段人数
+        int age3to4 = 0, age4to5 = 0, age5to6 = 0, other = 0;
+
+        for (Child child : children) {
+            if (child.getBirthDate() != null) {
+                int age = calculateAge(child.getBirthDate(), today);
+                if (age >= 3 && age < 4) {
+                    age3to4++;
+                } else if (age >= 4 && age < 5) {
+                    age4to5++;
+                } else if (age >= 5 && age < 6) {
+                    age5to6++;
+                } else {
+                    other++;
+                }
+            }
         }
 
+        // 构建结果
+        Map<String, Object> item1 = new HashMap<>();
+        item1.put("name", "3-4岁");
+        item1.put("value", age3to4);
+        result.add(item1);
+
+        Map<String, Object> item2 = new HashMap<>();
+        item2.put("name", "4-5岁");
+        item2.put("value", age4to5);
+        result.add(item2);
+
+        Map<String, Object> item3 = new HashMap<>();
+        item3.put("name", "5-6岁");
+        item3.put("value", age5to6);
+        result.add(item3);
+
         return result;
+    }
+
+    private int calculateAge(LocalDate birthDate, LocalDate currentDate) {
+        if (birthDate == null || currentDate == null) {
+            return 0;
+        }
+        return currentDate.getYear() - birthDate.getYear();
     }
 
     @Override
@@ -695,5 +728,178 @@ public class StatsServiceImpl implements StatsService {
             result.add(rankingData.get(i));
         }
         return result;
+    }
+
+    @Override
+    public Map<String, Object> getBigscreenData() {
+        Map<String, Object> data = new HashMap<>();
+        LocalDate today = LocalDate.now();
+
+        // 1. 核心指标
+        Map<String, Object> overview = new HashMap<>();
+        Long bookCount = bookMapper.selectCount(new QueryWrapper<Book>().eq("status", 1));
+        Long childCount = childMapper.selectCount(new QueryWrapper<Child>());
+        Long totalReads = readingLogMapper.selectCount(new QueryWrapper<ReadingLog>());
+        Long todayReads = readingLogMapper.selectCount(new QueryWrapper<ReadingLog>()
+                .ge("start_time", today.atStartOfDay()));
+
+        // 近7天活跃儿童
+        LocalDateTime weekAgo = today.minusDays(7).atStartOfDay();
+        List<Map<String, Object>> activeResult = readingLogMapper.selectMaps(
+                new QueryWrapper<ReadingLog>()
+                        .select("COUNT(DISTINCT child_id) as cnt")
+                        .ge("start_time", weekAgo));
+        long activeChildren = 0;
+        if (!activeResult.isEmpty() && activeResult.get(0).get("cnt") != null) {
+            activeChildren = ((Number) activeResult.get(0).get("cnt")).longValue();
+        }
+        double activeRate = childCount > 0 ? Math.round(activeChildren * 1000.0 / childCount) / 10.0 : 0;
+
+        // 人均阅读时长
+        List<Map<String, Object>> totalDurationResult = readingLogMapper.selectMaps(
+                new QueryWrapper<ReadingLog>().select("COALESCE(SUM(duration), 0) as totalDuration"));
+        long totalDuration = 0;
+        if (!totalDurationResult.isEmpty() && totalDurationResult.get(0).get("totalDuration") != null) {
+            totalDuration = ((Number) totalDurationResult.get(0).get("totalDuration")).longValue();
+        }
+        long avgDuration = childCount > 0 ? totalDuration / childCount : 0;
+
+        overview.put("bookCount", bookCount);
+        overview.put("childCount", childCount);
+        overview.put("totalReads", totalReads);
+        overview.put("todayReads", todayReads);
+        overview.put("activeRate", activeRate);
+        overview.put("avgDuration", avgDuration);
+        data.put("overview", overview);
+
+        // 2. 绘本分类分布
+        data.put("categoryDistribution", getBookCategoryStats());
+
+        // 3. 阅读类型分布 (取每个儿童最新一次分析，避免重复计数)
+        List<Child> allChildren = childMapper.selectList(new QueryWrapper<Child>());
+        int focusType = 0, interestType = 0, jumpType = 0;
+        for (Child c : allChildren) {
+            BehaviorAnalysis a = behaviorAnalysisMapper.selectOne(
+                new QueryWrapper<BehaviorAnalysis>().eq("child_id", c.getId()).orderByDesc("analysis_date").last("LIMIT 1"));
+            if (a != null && a.getReadingType() != null) {
+                String rt = a.getReadingType();
+                if (rt.contains("专注")) focusType++;
+                else if (rt.contains("兴趣")) interestType++;
+                else if (rt.contains("跳跃")) jumpType++;
+            }
+        }
+        List<Map<String, Object>> readingTypeDistribution = new ArrayList<>();
+        readingTypeDistribution.add(createMap("name", "专注型", "value", focusType));
+        readingTypeDistribution.add(createMap("name", "兴趣导向型", "value", interestType));
+        readingTypeDistribution.add(createMap("name", "跳跃型", "value", jumpType));
+        data.put("readingTypeDistribution", readingTypeDistribution);
+
+        // 4. 热门绘本排行榜
+        List<Book> hotBooks = bookMapper.selectList(new QueryWrapper<Book>()
+                .eq("status", 1).orderByDesc("read_count").last("LIMIT 8"));
+        List<Map<String, Object>> hotBookList = new ArrayList<>();
+        for (Book b : hotBooks) {
+            Map<String, Object> item = new HashMap<>();
+            item.put("title", b.getTitle());
+            item.put("readCount", b.getReadCount() != null ? b.getReadCount() : 0);
+            item.put("category", b.getCategory());
+            hotBookList.add(item);
+        }
+        data.put("hotBooks", hotBookList);
+
+        // 5. 分类阅读量柱状图
+        List<Map<String, Object>> categoryReads = new ArrayList<>();
+        List<Map<String, Object>> catStats = bookMapper.selectCategoryStats();
+        for (Map<String, Object> cs : catStats) {
+            String catName = (String) cs.get("category");
+            if (catName == null) catName = (String) cs.get("name");
+            if (catName == null) continue;
+            List<Book> catBooks = bookMapper.selectList(new QueryWrapper<Book>()
+                    .eq("category", catName).eq("status", 1).select("id"));
+            List<Long> catBookIds = new ArrayList<>();
+            for (Book b : catBooks) catBookIds.add(b.getId());
+            long cnt = 0;
+            if (!catBookIds.isEmpty()) {
+                cnt = readingLogMapper.selectCount(new QueryWrapper<ReadingLog>().in("book_id", catBookIds));
+            }
+            Map<String, Object> item = new HashMap<>();
+            item.put("name", catName);
+            item.put("readCount", cnt);
+            categoryReads.add(item);
+        }
+        data.put("categoryReads", categoryReads);
+
+        // 6. 阅读趋势（近30天）
+        data.put("readingTrend", getReadingTrend(30));
+
+        // 7. 阅读时段热力图（7天×24小时）
+        List<List<Object>> heatmap = new ArrayList<>();
+        for (int d = 6; d >= 0; d--) {
+            LocalDate date = today.minusDays(d);
+            for (int h = 0; h < 24; h++) {
+                LocalDateTime start = date.atTime(h, 0);
+                LocalDateTime end = start.plusHours(1);
+                Long cnt = readingLogMapper.selectCount(new QueryWrapper<ReadingLog>()
+                        .ge("start_time", start).lt("start_time", end));
+                List<Object> point = new ArrayList<>();
+                point.add(6 - d);
+                point.add(h);
+                point.add(cnt);
+                heatmap.add(point);
+            }
+        }
+        data.put("readingHeatmap", heatmap);
+
+        // 8. 年龄段分布（根据出生日期计算）
+        List<Map<String, Object>> ageDistribution = new ArrayList<>();
+        Map<String, List<Long>> ageGroupChildIds = new LinkedHashMap<>();
+        ageGroupChildIds.put("2-3岁", new ArrayList<>());
+        ageGroupChildIds.put("3-4岁", new ArrayList<>());
+        ageGroupChildIds.put("4-5岁", new ArrayList<>());
+        ageGroupChildIds.put("5-6岁", new ArrayList<>());
+        for (Child c : allChildren) {
+            if (c.getBirthDate() == null) continue;
+            int age = Period.between(c.getBirthDate(), today).getYears();
+            if (age >= 2 && age < 3) ageGroupChildIds.get("2-3岁").add(c.getId());
+            else if (age >= 3 && age < 4) ageGroupChildIds.get("3-4岁").add(c.getId());
+            else if (age >= 4 && age < 5) ageGroupChildIds.get("4-5岁").add(c.getId());
+            else if (age >= 5 && age < 6) ageGroupChildIds.get("5-6岁").add(c.getId());
+        }
+        for (Map.Entry<String, List<Long>> entry : ageGroupChildIds.entrySet()) {
+            Map<String, Object> item = new HashMap<>();
+            item.put("ageRange", entry.getKey());
+            item.put("childCount", entry.getValue().size());
+            long readCnt = 0;
+            if (!entry.getValue().isEmpty()) {
+                readCnt = readingLogMapper.selectCount(new QueryWrapper<ReadingLog>().in("child_id", entry.getValue()));
+            }
+            item.put("readCount", readCnt);
+            ageDistribution.add(item);
+        }
+        data.put("ageDistribution", ageDistribution);
+
+        // 9. 班级阅读排行榜
+        List<Map<String, Object>> classRanking = new ArrayList<>();
+        List<ClassInfo> classes = classInfoMapper.selectList(new QueryWrapper<ClassInfo>());
+        for (ClassInfo ci : classes) {
+            List<Child> stuList = childMapper.selectList(new QueryWrapper<Child>().eq("class_id", ci.getId()));
+            List<Long> stuIds = new ArrayList<>();
+            for (Child c : stuList) stuIds.add(c.getId());
+            long classReads = 0;
+            if (!stuIds.isEmpty()) {
+                classReads = readingLogMapper.selectCount(new QueryWrapper<ReadingLog>().in("child_id", stuIds));
+            }
+            double avgReads = stuList.size() > 0 ? Math.round(classReads * 10.0 / stuList.size()) / 10.0 : 0;
+            Map<String, Object> item = new HashMap<>();
+            item.put("className", ci.getClassName());
+            item.put("studentCount", stuList.size());
+            item.put("avgReadCount", avgReads);
+            classRanking.add(item);
+        }
+        classRanking.sort((a, b) -> Double.compare((Double) b.get("avgReadCount"), (Double) a.get("avgReadCount")));
+        if (classRanking.size() > 8) classRanking = classRanking.subList(0, 8);
+        data.put("classRanking", classRanking);
+
+        return data;
     }
 }

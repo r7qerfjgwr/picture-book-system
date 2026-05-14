@@ -1,0 +1,152 @@
+{
+  "version": 1,
+  "title": "绘本推荐算法流程图",
+  "type": "academic-diagram",
+  "source": "generated",
+  "profile": "academic-paper",
+  "theme": "academic",
+  "layout": "vertical",
+  "counts": {
+    "nodes": 11,
+    "edges": 13,
+    "modules": 0
+  },
+  "nodes": [
+    {
+      "id": "start",
+      "label": "开始",
+      "type": "terminal"
+    },
+    {
+      "id": "get_info",
+      "label": "获取儿童基本信息\\n(年龄、阅读类型、兴趣标签)",
+      "type": "service"
+    },
+    {
+      "id": "parallel_box",
+      "label": "多策略并行计算",
+      "type": "service"
+    },
+    {
+      "id": "content_rec",
+      "label": "内容推荐\\n基于兴趣标签匹配\\n绘本特征向量",
+      "type": "service"
+    },
+    {
+      "id": "collaborative",
+      "label": "协同过滤\\n基于同龄儿童\\n阅读行为相似度",
+      "type": "service"
+    },
+    {
+      "id": "age_rec",
+      "label": "年龄推荐\\n基于年龄段\\n匹配适读绘本",
+      "type": "service"
+    },
+    {
+      "id": "difficulty",
+      "label": "难度匹配\\n基于阅读能力\\n匹配合适难度",
+      "type": "service"
+    },
+    {
+      "id": "merge",
+      "label": "加权融合各策略得分\\n计算综合推荐评分",
+      "type": "service"
+    },
+    {
+      "id": "sort",
+      "label": "按评分排序\\n筛选Top-N绘本",
+      "type": "service"
+    },
+    {
+      "id": "output",
+      "label": "生成个性化推荐列表",
+      "type": "service"
+    },
+    {
+      "id": "end",
+      "label": "结束",
+      "type": "terminal"
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-1",
+      "from": "start",
+      "to": "get_info",
+      "type": "primary"
+    },
+    {
+      "id": "edge-2",
+      "from": "get_info",
+      "to": "parallel_box",
+      "type": "primary"
+    },
+    {
+      "id": "edge-3",
+      "from": "parallel_box",
+      "to": "content_rec",
+      "type": "primary"
+    },
+    {
+      "id": "edge-4",
+      "from": "parallel_box",
+      "to": "collaborative",
+      "type": "primary"
+    },
+    {
+      "id": "edge-5",
+      "from": "parallel_box",
+      "to": "age_rec",
+      "type": "primary"
+    },
+    {
+      "id": "edge-6",
+      "from": "parallel_box",
+      "to": "difficulty",
+      "type": "primary"
+    },
+    {
+      "id": "edge-7",
+      "from": "content_rec",
+      "to": "merge",
+      "type": "primary"
+    },
+    {
+      "id": "edge-8",
+      "from": "collaborative",
+      "to": "merge",
+      "type": "primary"
+    },
+    {
+      "id": "edge-9",
+      "from": "age_rec",
+      "to": "merge",
+      "type": "primary"
+    },
+    {
+      "id": "edge-10",
+      "from": "difficulty",
+      "to": "merge",
+      "type": "primary"
+    },
+    {
+      "id": "edge-11",
+      "from": "merge",
+      "to": "sort",
+      "type": "primary"
+    },
+    {
+      "id": "edge-12",
+      "from": "sort",
+      "to": "output",
+      "type": "primary"
+    },
+    {
+      "id": "edge-13",
+      "from": "output",
+      "to": "end",
+      "type": "primary"
+    }
+  ],
+  "modules": []
+}

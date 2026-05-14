@@ -131,3 +131,10 @@ export function getHotBooks(limit = 10) {
     params: { limit }
   })
 }
+
+export function getBookPages(bookId) {
+  return request({
+    url: `/book-pages/${bookId}`,
+    method: 'get'
+  })
+}

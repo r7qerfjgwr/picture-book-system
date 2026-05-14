@@ -28,7 +28,7 @@
         <el-sub-menu index="children" v-if="userStore.isParent" class="sub-menu">
           <template #title>
             <span class="menu-emoji">👦</span>
-            <span>儿童管理</span>
+            <span v-if="!isCollapse">儿童管理</span>
           </template>
           <el-menu-item index="/app/children" class="sub-menu-item">我的孩子</el-menu-item>
         </el-sub-menu>
@@ -36,27 +36,27 @@
         <el-sub-menu index="books" v-if="userStore.isAdmin" class="sub-menu">
           <template #title>
             <span class="menu-emoji">📖</span>
-            <span>绘本管理</span>
+            <span v-if="!isCollapse">绘本管理</span>
           </template>
-          <el-menu-item index="/app/books" class="sub-menu-item">绘本列表</el-menu-item>
+          <el-menu-item index="/app/books" class="sub-menu-item">📚 绘本列表</el-menu-item>
         </el-sub-menu>
 
         <el-sub-menu index="category" class="sub-menu">
           <template #title>
             <span class="menu-emoji">🏷️</span>
-            <span>绘本分类</span>
+            <span v-if="!isCollapse">绘本分类</span>
           </template>
-          <el-menu-item index="/app/books/category/animal" class="sub-menu-item">
-            <span class="category-emoji">🐻</span>动物类
+          <el-menu-item index="/app/books/category/cognitive" class="sub-menu-item">
+            <span class="category-emoji">🧒</span>认知启蒙类
           </el-menu-item>
           <el-menu-item index="/app/books/category/science" class="sub-menu-item">
-            <span class="category-emoji">🔬</span>科普类
+            <span class="category-emoji">🔬</span>科普探索类
           </el-menu-item>
           <el-menu-item index="/app/books/category/emotion" class="sub-menu-item">
-            <span class="category-emoji">❤️</span>情感类
+            <span class="category-emoji">❤️</span>情感培养类
           </el-menu-item>
-          <el-menu-item index="/app/books/category/fairy_tale" class="sub-menu-item">
-            <span class="category-emoji">🏰</span>童话类
+          <el-menu-item index="/app/books/category/story" class="sub-menu-item">
+            <span class="category-emoji">🏰</span>童话故事类
           </el-menu-item>
         </el-sub-menu>
 
@@ -179,13 +179,18 @@ const currentPageTitle = computed(() => {
     '/app/dashboard': '首页看板',
     '/app/children': '儿童管理',
     '/app/books': '绘本管理',
+    '/app/children-analysis': '儿童分析概览',
     '/app/reading-logs': '阅读记录',
     '/app/analysis': '行为分析',
     '/app/growth': '成长跟踪',
     '/app/recommendations': '绘本推荐',
     '/app/class': '班级管理',
     '/app/users': '用户管理',
-    '/app/children-analysis': '儿童分析概览'
+    '/app/children-analysis': '儿童分析概览',
+    '/app/books/category/cognitive': '认知启蒙类',
+    '/app/books/category/science': '科普探索类',
+    '/app/books/category/emotion': '情感培养类',
+    '/app/books/category/story': '童话故事类'
   }
   return titles[route.path] || '绘本阅读系统'
 })
@@ -226,8 +231,11 @@ const handleCommand = (command) => {
 .storybook-aside {
   background: linear-gradient(180deg, #ffecd2 0%, #fcb69f 50%, #ffecd2 100%);
   position: relative;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   transition: width 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 
 .storybook-aside::before {
@@ -300,6 +308,8 @@ const handleCommand = (command) => {
   background: transparent;
   border: none;
   padding: 12px 8px;
+  flex: 1;
+  overflow-y: auto;
 }
 
 .storybook-menu :deep(.el-menu-item),
@@ -329,6 +339,15 @@ const handleCommand = (command) => {
   font-size: 20px;
   margin-right: 10px;
   transition: transform 0.3s ease;
+}
+
+/* 折叠状态下emoji居中、去掉右边距 */
+.storybook-menu :deep(.el-menu--collapse .el-sub-menu__title .menu-emoji) {
+  margin-right: 0;
+}
+
+.storybook-menu :deep(.el-menu--collapse .el-sub-menu__title .el-sub-menu__icon-arrow) {
+  display: none;
 }
 
 .storybook-menu :deep(.el-menu-item:hover .menu-emoji) {
@@ -402,11 +421,9 @@ const handleCommand = (command) => {
 
 /* 侧边栏底部 */
 .aside-footer {
-  position: absolute;
-  bottom: 20px;
-  left: 0;
-  right: 0;
+  padding: 16px 0;
   text-align: center;
+  flex-shrink: 0;
 }
 
 .deco-stars span {

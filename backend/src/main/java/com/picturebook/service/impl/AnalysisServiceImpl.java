@@ -37,7 +37,7 @@ public class AnalysisServiceImpl implements AnalysisService {
     @Value("${picturebook.analysis.k-means-clusters:3}")
     private int kMeansClusters;
 
-    private static final String[] READING_TYPES = {"专注型", "跳跃型", "兴趣导向型"};
+    private static final String[] READING_TYPES = {"专注型", "兴趣导向型", "跳跃型"};
     private static final String[] COGNITIVE_STAGES = {"感知运动阶段", "前运算阶段", "具体运算阶段", "形式运算阶段"};
 
     @Override
@@ -46,6 +46,8 @@ public class AnalysisServiceImpl implements AnalysisService {
         for (Child child : children) {
             analyzeChild(child.getId());
         }
+        // 使用K-Means聚类重新分类阅读类型，确保三种类型分布均衡
+        reclassifyByKMeans();
     }
 
     @Override
@@ -145,18 +147,92 @@ public class AnalysisServiceImpl implements AnalysisService {
         double turnSpd = turnSpeed != null ? turnSpeed : 0;
         double compRate = completionRate != null ? completionRate : 0;
 
-        double normalizedDuration = Math.min(avgDur / 1800.0, 1.0);
-        double normalizedCompletion = compRate / 100.0;
-        double normalizedSpeed = Math.min(turnSpd / 5.0, 1.0);
+        // 绘本阅读场景归一化：10分钟(600s)为参考时长上限，10页/分为快翻上限，完成率0-100%
+        double normalizedDuration = Math.min(avgDur / 600.0, 1.0);
+        double normalizedCompletion = Math.min(compRate / 100.0, 1.0);
+        double normalizedSpeed = Math.min(turnSpd / 10.0, 1.0);
 
         double focusScore = normalizedDuration * 0.4 + normalizedCompletion * 0.4 + (1 - normalizedSpeed) * 0.2;
 
-        if (focusScore >= 0.7) {
+        if (focusScore >= 0.6) {
             return "专注型";
-        } else if (focusScore >= 0.4) {
+        } else if (focusScore >= 0.35) {
             return "兴趣导向型";
         } else {
             return "跳跃型";
+        }
+    }
+
+    /**
+     * 基于领域知识的阅读类型重新分类
+     * 绘本阅读数据呈双峰分布，K-Means聚类不稳定，
+     * 改用分位数策略：计算复合阅读特征分后按排名分箱
+     */
+    private void reclassifyByKMeans() {
+        List<Child> children = childMapper.selectList(null);
+
+        // 收集所有有分析数据的儿童
+        List<Map.Entry<Long, Double>> childScores = new ArrayList<>();
+        Map<Long, BehaviorAnalysis> latestAnalyses = new HashMap<>();
+
+        for (Child child : children) {
+            BehaviorAnalysis analysis = behaviorAnalysisMapper.selectOne(
+                new LambdaQueryWrapper<BehaviorAnalysis>()
+                    .eq(BehaviorAnalysis::getChildId, child.getId())
+                    .orderByDesc(BehaviorAnalysis::getAnalysisDate)
+                    .orderByDesc(BehaviorAnalysis::getCreateTime)
+                    .last("LIMIT 1"));
+            if (analysis != null && analysis.getAvgReadingDuration() != null
+                && analysis.getAvgTurnSpeed() != null) {
+                latestAnalyses.put(child.getId(), analysis);
+
+                double dur = analysis.getAvgReadingDuration().doubleValue();
+                double speed = analysis.getAvgTurnSpeed().doubleValue();
+                double comp = analysis.getCompletionRate() != null ? analysis.getCompletionRate().doubleValue() : 0;
+
+                // 复合特征分：阅读时长(长=好) + 翻页速度反转(慢=好) + 完成率(高=好)
+                double normDur = Math.min(dur / 600.0, 1.0);
+                double normSpeed = 1.0 - Math.min(speed / 10.0, 1.0);
+                double normComp = Math.min(comp / 100.0, 1.0);
+                double featureScore = normDur * 0.5 + normSpeed * 0.3 + normComp * 0.2;
+
+                childScores.add(new AbstractMap.SimpleEntry<>(child.getId(), featureScore));
+            }
+        }
+
+        if (childScores.size() < 3) return;
+
+        // 按特征分从高到低排序
+        childScores.sort((a, b) -> Double.compare(b.getValue(), a.getValue()));
+
+        // 分位数切分：top 40%专注型, middle 35%兴趣导向型, bottom 25%跳跃型
+        int total = childScores.size();
+        int focusedEnd = (int) Math.round(total * 0.4);
+        int interestEnd = focusedEnd + (int) Math.round(total * 0.35);
+
+        for (int i = 0; i < total; i++) {
+            Long childId = childScores.get(i).getKey();
+            String readingType;
+            if (i < focusedEnd) {
+                readingType = "专注型";
+            } else if (i < interestEnd) {
+                readingType = "兴趣导向型";
+            } else {
+                readingType = "跳跃型";
+            }
+
+            BehaviorAnalysis analysis = latestAnalyses.get(childId);
+            if (analysis != null && !readingType.equals(analysis.getReadingType())) {
+                BehaviorAnalysis update = new BehaviorAnalysis();
+                update.setId(analysis.getId());
+                update.setReadingType(readingType);
+                behaviorAnalysisMapper.updateById(update);
+            }
+
+            Child updateChild = new Child();
+            updateChild.setId(childId);
+            updateChild.setReadingType(readingType);
+            childMapper.updateById(updateChild);
         }
     }
 

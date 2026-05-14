@@ -23,10 +23,10 @@ public class BookServiceImpl implements BookService {
     @Autowired
     private BookMapper bookMapper;
 
-    private static final List<String> CATEGORIES = Arrays.asList("动物", "科普", "情感", "童话");
-    private static final List<String> AGE_RANGES = Arrays.asList("3-4岁", "4-5岁", "5-6岁");
-    private static final List<String> KNOWLEDGE_TYPES = Arrays.asList("语言", "数学", "科学", "艺术", "社会");
-    private static final List<String> ART_STYLES = Arrays.asList("水彩", "卡通", "写实", "剪纸", "拼贴");
+    private static final List<String> CATEGORIES = Arrays.asList("认知启蒙", "科学探索", "艺术启蒙", "生活习惯", "品格教育", "安全教育", "情感培养", "社会交往", "益智游戏", "故事");
+    private static final List<String> AGE_RANGES = Arrays.asList("2-3岁", "3-4岁", "4-5岁", "5-6岁");
+    private static final List<String> KNOWLEDGE_TYPES = Arrays.asList("认知发展", "科学素养", "艺术审美", "生活技能", "品德修养", "安全意识", "情感表达", "社会适应", "逻辑思维", "语言发展");
+    private static final List<String> ART_STYLES = Arrays.asList("水彩画", "卡通画", "写实画", "手绘插画", "拼贴画");
 
     @Override
     public Page<Book> getBookList(PageDTO dto) {
@@ -41,6 +41,9 @@ public class BookServiceImpl implements BookService {
         }
         if (StringUtils.hasText(dto.getStatus())) {
             wrapper.eq(Book::getStatus, Integer.parseInt(dto.getStatus()));
+        }
+        if (dto.getDifficultyLevel() != null) {
+            wrapper.eq(Book::getDifficultyLevel, dto.getDifficultyLevel());
         }
         wrapper.orderByDesc(Book::getCreateTime);
         return bookMapper.selectPage(page, wrapper);

@@ -1,0 +1,316 @@
+{
+  "version": 1,
+  "title": "系统功能模块图",
+  "type": "academic-diagram",
+  "source": "generated",
+  "profile": "academic-paper",
+  "theme": "academic-color",
+  "layout": "vertical",
+  "counts": {
+    "nodes": 24,
+    "edges": 22,
+    "modules": 5
+  },
+  "nodes": [
+    {
+      "id": "main_system",
+      "label": "儿童绘本阅读系统",
+      "type": "user",
+      "module": "main"
+    },
+    {
+      "id": "admin_module",
+      "label": "管理员端",
+      "type": "service",
+      "module": "admin"
+    },
+    {
+      "id": "admin_user",
+      "label": "用户管理",
+      "type": "service",
+      "module": "admin"
+    },
+    {
+      "id": "admin_book",
+      "label": "绘本管理",
+      "type": "service",
+      "module": "admin"
+    },
+    {
+      "id": "admin_class",
+      "label": "班级管理",
+      "type": "service",
+      "module": "admin"
+    },
+    {
+      "id": "admin_analysis",
+      "label": "儿童分析概览",
+      "type": "service",
+      "module": "admin"
+    },
+    {
+      "id": "admin_stats",
+      "label": "数据统计",
+      "type": "service",
+      "module": "admin"
+    },
+    {
+      "id": "teacher_module",
+      "label": "教师端",
+      "type": "service",
+      "module": "teacher"
+    },
+    {
+      "id": "teacher_class",
+      "label": "班级管理",
+      "type": "service",
+      "module": "teacher"
+    },
+    {
+      "id": "teacher_record",
+      "label": "学生阅读记录",
+      "type": "service",
+      "module": "teacher"
+    },
+    {
+      "id": "teacher_analysis",
+      "label": "行为分析",
+      "type": "service",
+      "module": "teacher"
+    },
+    {
+      "id": "teacher_growth",
+      "label": "成长跟踪",
+      "type": "service",
+      "module": "teacher"
+    },
+    {
+      "id": "teacher_recommend",
+      "label": "绘本推荐",
+      "type": "service",
+      "module": "teacher"
+    },
+    {
+      "id": "parent_module",
+      "label": "家长端",
+      "type": "service",
+      "module": "parent"
+    },
+    {
+      "id": "parent_child",
+      "label": "儿童管理",
+      "type": "service",
+      "module": "parent"
+    },
+    {
+      "id": "parent_record",
+      "label": "阅读记录",
+      "type": "service",
+      "module": "parent"
+    },
+    {
+      "id": "parent_analysis",
+      "label": "行为分析",
+      "type": "service",
+      "module": "parent"
+    },
+    {
+      "id": "parent_growth",
+      "label": "成长跟踪",
+      "type": "service",
+      "module": "parent"
+    },
+    {
+      "id": "parent_recommend",
+      "label": "绘本推荐",
+      "type": "service",
+      "module": "parent"
+    },
+    {
+      "id": "common_module",
+      "label": "公共功能模块",
+      "type": "service",
+      "module": "common"
+    },
+    {
+      "id": "common_login",
+      "label": "系统登录",
+      "type": "service",
+      "module": "common"
+    },
+    {
+      "id": "common_browse",
+      "label": "绘本分类浏览",
+      "type": "service",
+      "module": "common"
+    },
+    {
+      "id": "common_profile",
+      "label": "个人中心",
+      "type": "service",
+      "module": "common"
+    },
+    {
+      "id": "common_notify",
+      "label": "消息通知",
+      "type": "service",
+      "module": "common"
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-1",
+      "from": "main_system",
+      "to": "admin_module",
+      "type": "primary"
+    },
+    {
+      "id": "edge-2",
+      "from": "main_system",
+      "to": "teacher_module",
+      "type": "primary"
+    },
+    {
+      "id": "edge-3",
+      "from": "main_system",
+      "to": "parent_module",
+      "type": "primary"
+    },
+    {
+      "id": "edge-4",
+      "from": "admin_module",
+      "to": "admin_user",
+      "type": "data"
+    },
+    {
+      "id": "edge-5",
+      "from": "admin_module",
+      "to": "admin_book",
+      "type": "data"
+    },
+    {
+      "id": "edge-6",
+      "from": "admin_module",
+      "to": "admin_class",
+      "type": "data"
+    },
+    {
+      "id": "edge-7",
+      "from": "admin_module",
+      "to": "admin_analysis",
+      "type": "data"
+    },
+    {
+      "id": "edge-8",
+      "from": "admin_module",
+      "to": "admin_stats",
+      "type": "data"
+    },
+    {
+      "id": "edge-9",
+      "from": "teacher_module",
+      "to": "teacher_class",
+      "type": "data"
+    },
+    {
+      "id": "edge-10",
+      "from": "teacher_module",
+      "to": "teacher_record",
+      "type": "data"
+    },
+    {
+      "id": "edge-11",
+      "from": "teacher_module",
+      "to": "teacher_analysis",
+      "type": "data"
+    },
+    {
+      "id": "edge-12",
+      "from": "teacher_module",
+      "to": "teacher_growth",
+      "type": "data"
+    },
+    {
+      "id": "edge-13",
+      "from": "teacher_module",
+      "to": "teacher_recommend",
+      "type": "data"
+    },
+    {
+      "id": "edge-14",
+      "from": "parent_module",
+      "to": "parent_child",
+      "type": "data"
+    },
+    {
+      "id": "edge-15",
+      "from": "parent_module",
+      "to": "parent_record",
+      "type": "data"
+    },
+    {
+      "id": "edge-16",
+      "from": "parent_module",
+      "to": "parent_analysis",
+      "type": "data"
+    },
+    {
+      "id": "edge-17",
+      "from": "parent_module",
+      "to": "parent_growth",
+      "type": "data"
+    },
+    {
+      "id": "edge-18",
+      "from": "parent_module",
+      "to": "parent_recommend",
+      "type": "data"
+    },
+    {
+      "id": "edge-19",
+      "from": "common_module",
+      "to": "common_login",
+      "type": "data"
+    },
+    {
+      "id": "edge-20",
+      "from": "common_module",
+      "to": "common_browse",
+      "type": "data"
+    },
+    {
+      "id": "edge-21",
+      "from": "common_module",
+      "to": "common_profile",
+      "type": "data"
+    },
+    {
+      "id": "edge-22",
+      "from": "common_module",
+      "to": "common_notify",
+      "type": "data"
+    }
+  ],
+  "modules": [
+    {
+      "id": "main",
+      "label": "儿童绘本阅读系统"
+    },
+    {
+      "id": "admin",
+      "label": "管理员端"
+    },
+    {
+      "id": "teacher",
+      "label": "教师端"
+    },
+    {
+      "id": "parent",
+      "label": "家长端"
+    },
+    {
+      "id": "common",
+      "label": "公共功能模块"
+    }
+  ]
+}

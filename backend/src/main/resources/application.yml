@@ -2,6 +2,8 @@ server:
   port: 8080
   servlet:
     context-path: /api
+  tomcat:
+    uri-encoding: UTF-8
 
 spring:
   application:
@@ -55,3 +57,16 @@ picturebook:
     lock-time: 30
   analysis:
     k-means-clusters: 3
+
+spark:
+  enabled: false
+  app-name: PictureBookAnalysis
+  master: local[*]
+  eventLog:
+    enabled: false
+
+hadoop:
+  hdfs:
+    enabled: false
+    namenode: hdfs://localhost:9000
+    user: root

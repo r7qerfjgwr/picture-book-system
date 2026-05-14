@@ -1,0 +1,255 @@
+{
+  "version": 1,
+  "title": "系统架构图",
+  "type": "academic-diagram",
+  "source": "generated",
+  "profile": "academic-paper",
+  "theme": "tech-blue",
+  "layout": "horizontal",
+  "counts": {
+    "nodes": 19,
+    "edges": 17,
+    "modules": 4
+  },
+  "nodes": [
+    {
+      "id": "presentation_layer",
+      "label": "表现层 (Presentation Layer)",
+      "type": "service",
+      "module": "presentation"
+    },
+    {
+      "id": "vue",
+      "label": "Vue 3",
+      "type": "service",
+      "module": "presentation"
+    },
+    {
+      "id": "element",
+      "label": "Element Plus",
+      "type": "service",
+      "module": "presentation"
+    },
+    {
+      "id": "echarts",
+      "label": "ECharts",
+      "type": "service",
+      "module": "presentation"
+    },
+    {
+      "id": "axios",
+      "label": "Axios",
+      "type": "service",
+      "module": "presentation"
+    },
+    {
+      "id": "pinia",
+      "label": "Pinia",
+      "type": "service",
+      "module": "presentation"
+    },
+    {
+      "id": "business_layer",
+      "label": "业务逻辑层 (Business Logic Layer)",
+      "type": "service",
+      "module": "business"
+    },
+    {
+      "id": "controller",
+      "label": "Controller",
+      "type": "service",
+      "module": "business"
+    },
+    {
+      "id": "service",
+      "label": "Service",
+      "type": "service",
+      "module": "business"
+    },
+    {
+      "id": "security",
+      "label": "Security",
+      "type": "service",
+      "module": "business"
+    },
+    {
+      "id": "task",
+      "label": "Task",
+      "type": "service",
+      "module": "business"
+    },
+    {
+      "id": "springboot",
+      "label": "Spring Boot 3 + Java 17",
+      "type": "service",
+      "module": "business"
+    },
+    {
+      "id": "data_layer",
+      "label": "数据访问层 (Data Access Layer)",
+      "type": "service",
+      "module": "data"
+    },
+    {
+      "id": "user_mapper",
+      "label": "UserMapper",
+      "type": "database",
+      "module": "data"
+    },
+    {
+      "id": "book_mapper",
+      "label": "BookMapper",
+      "type": "database",
+      "module": "data"
+    },
+    {
+      "id": "child_mapper",
+      "label": "ChildMapper",
+      "type": "database",
+      "module": "data"
+    },
+    {
+      "id": "log_mapper",
+      "label": "ReadingLogMapper",
+      "type": "database",
+      "module": "data"
+    },
+    {
+      "id": "other_mapper",
+      "label": "...",
+      "type": "database",
+      "module": "data"
+    },
+    {
+      "id": "storage_layer",
+      "label": "数据存储层 - MySQL 8.0",
+      "type": "database",
+      "module": "storage"
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-1",
+      "from": "presentation_layer",
+      "to": "business_layer",
+      "type": "primary",
+      "label": "HTTP/JSON"
+    },
+    {
+      "id": "edge-2",
+      "from": "business_layer",
+      "to": "data_layer",
+      "type": "primary",
+      "label": "MyBatis-Plus"
+    },
+    {
+      "id": "edge-3",
+      "from": "data_layer",
+      "to": "storage_layer",
+      "type": "primary",
+      "label": "JDBC"
+    },
+    {
+      "id": "edge-4",
+      "from": "presentation_layer",
+      "to": "vue",
+      "type": "data"
+    },
+    {
+      "id": "edge-5",
+      "from": "presentation_layer",
+      "to": "element",
+      "type": "data"
+    },
+    {
+      "id": "edge-6",
+      "from": "presentation_layer",
+      "to": "echarts",
+      "type": "data"
+    },
+    {
+      "id": "edge-7",
+      "from": "presentation_layer",
+      "to": "axios",
+      "type": "data"
+    },
+    {
+      "id": "edge-8",
+      "from": "presentation_layer",
+      "to": "pinia",
+      "type": "data"
+    },
+    {
+      "id": "edge-9",
+      "from": "business_layer",
+      "to": "controller",
+      "type": "data"
+    },
+    {
+      "id": "edge-10",
+      "from": "business_layer",
+      "to": "service",
+      "type": "data"
+    },
+    {
+      "id": "edge-11",
+      "from": "business_layer",
+      "to": "security",
+      "type": "data"
+    },
+    {
+      "id": "edge-12",
+      "from": "business_layer",
+      "to": "task",
+      "type": "data"
+    },
+    {
+      "id": "edge-13",
+      "from": "data_layer",
+      "to": "user_mapper",
+      "type": "data"
+    },
+    {
+      "id": "edge-14",
+      "from": "data_layer",
+      "to": "book_mapper",
+      "type": "data"
+    },
+    {
+      "id": "edge-15",
+      "from": "data_layer",
+      "to": "child_mapper",
+      "type": "data"
+    },
+    {
+      "id": "edge-16",
+      "from": "data_layer",
+      "to": "log_mapper",
+      "type": "data"
+    },
+    {
+      "id": "edge-17",
+      "from": "data_layer",
+      "to": "other_mapper",
+      "type": "data"
+    }
+  ],
+  "modules": [
+    {
+      "id": "presentation",
+      "label": "表现层"
+    },
+    {
+      "id": "business",
+      "label": "业务逻辑层"
+    },
+    {
+      "id": "data",
+      "label": "数据访问层"
+    },
+    {
+      "id": "storage",
+      "label": "数据存储层"
+    }
+  ]
+}

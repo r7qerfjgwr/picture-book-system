@@ -74,4 +74,6 @@ public interface StatsService {
      * 获取儿童排行榜
      */
     List<Map<String, Object>> getChildrenRanking(String type, Integer limit);
+
+    Map<String, Object> getBigscreenData();
 }

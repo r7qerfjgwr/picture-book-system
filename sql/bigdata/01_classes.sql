@@ -1,0 +1,9 @@
+INSERT INTO class_info (id, class_name, institution_name, student_count, description) VALUES (22, '小班H', '阳光幼儿园', 120, '3年级H班，注重阅读启蒙教育');
+INSERT INTO class_info (id, class_name, institution_name, student_count, description) VALUES (23, '小班I', '阳光幼儿园', 87, '3年级I班，注重阅读启蒙教育');
+INSERT INTO class_info (id, class_name, institution_name, student_count, description) VALUES (24, '小班J', '阳光幼儿园', 81, '3年级J班，注重阅读启蒙教育');
+INSERT INTO class_info (id, class_name, institution_name, student_count, description) VALUES (25, '中班H', '阳光幼儿园', 97, '4年级H班，注重阅读启蒙教育');
+INSERT INTO class_info (id, class_name, institution_name, student_count, description) VALUES (26, '中班I', '阳光幼儿园', 95, '4年级I班，注重阅读启蒙教育');
+INSERT INTO class_info (id, class_name, institution_name, student_count, description) VALUES (27, '中班J', '阳光幼儿园', 94, '4年级J班，注重阅读启蒙教育');
+INSERT INTO class_info (id, class_name, institution_name, student_count, description) VALUES (28, '大班H', '阳光幼儿园', 88, '5年级H班，注重阅读启蒙教育');
+INSERT INTO class_info (id, class_name, institution_name, student_count, description) VALUES (29, '大班I', '阳光幼儿园', 86, '5年级I班，注重阅读启蒙教育');
+INSERT INTO class_info (id, class_name, institution_name, student_count, description) VALUES (30, '大班J', '阳光幼儿园', 114, '5年级J班，注重阅读启蒙教育');

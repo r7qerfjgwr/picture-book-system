@@ -1,0 +1,119 @@
+meta:
+  profile: academic-paper
+  figureType: workflow
+  theme: academic
+  layout: vertical
+  title: "阅读行为分析流程图"
+  description: "儿童阅读行为数据采集、处理、分析、分类流程"
+
+nodes:
+  # 开始
+  - id: start
+    label: 开始
+    type: terminal
+    position: { x: 260, y: 40 }
+
+  # 数据采集
+  - id: collect
+    label: 采集阅读行为数据\n阅读时长、翻页速度、重复阅读、互动行为
+    type: service
+    position: { x: 160, y: 120 }
+
+  # 数据预处理
+  - id: preprocess
+    label: 数据预处理\n数据清洗、归一化、特征提取
+    type: service
+    position: { x: 160, y: 240 }
+
+  # 多维特征计算框
+  - id: feature_box
+    label: 多维度特征计算
+    type: service
+    position: { x: 160, y: 360 }
+
+  # 六个特征维度
+  - id: focus
+    label: 专注度评分
+    type: service
+    position: { x: 40, y: 460 }
+  - id: page_speed
+    label: 翻页速度
+    type: service
+    position: { x: 120, y: 460 }
+  - id: complete
+    label: 完成率
+    type: service
+    position: { x: 200, y: 460 }
+  - id: repeat
+    label: 重复偏好
+    type: service
+    position: { x: 280, y: 460 }
+  - id: interact
+    label: 互动得分
+    type: service
+    position: { x: 360, y: 460 }
+  - id: emotion
+    label: 情绪稳定性
+    type: service
+    position: { x: 440, y: 460 }
+
+  # 阅读类型分类
+  - id: classify
+    label: 阅读类型分类\n专注型 / 兴趣导向型 / 跳跃型
+    type: decision
+    position: { x: 160, y: 580 }
+
+  # 生成报告
+  - id: report
+    label: 生成行为分析报告\n能力评估、兴趣分析、改进建议
+    type: service
+    position: { x: 160, y: 700 }
+
+  # 结束
+  - id: end
+    label: 结束
+    type: terminal
+    position: { x: 260, y: 800 }
+
+edges:
+  - from: start
+    to: collect
+    type: primary
+  - from: collect
+    to: preprocess
+    type: primary
+  - from: preprocess
+    to: feature_box
+    type: primary
+
+  # 特征计算
+  - from: feature_box
+    to: focus
+    type: data
+  - from: feature_box
+    to: page_speed
+    type: data
+  - from: feature_box
+    to: complete
+    type: data
+  - from: feature_box
+    to: repeat
+    type: data
+  - from: feature_box
+    to: interact
+    type: data
+  - from: feature_box
+    to: emotion
+    type: data
+
+  # 分类
+  - from: feature_box
+    to: classify
+    type: primary
+
+  - from: classify
+    to: report
+    type: primary
+  - from: report
+    to: end
+    type: primary

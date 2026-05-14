@@ -40,6 +40,18 @@ public class ClassInfoServiceImpl implements ClassInfoService {
     }
 
     @Override
+    public Page<ClassInfo> getClassListByTeacher(PageDTO dto, Long teacherId) {
+        Page<ClassInfo> page = new Page<>(dto.getCurrent(), dto.getSize());
+        LambdaQueryWrapper<ClassInfo> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(ClassInfo::getTeacherId, teacherId);
+        if (StringUtils.hasText(dto.getKeyword())) {
+            wrapper.like(ClassInfo::getClassName, dto.getKeyword());
+        }
+        wrapper.orderByDesc(ClassInfo::getCreateTime);
+        return classInfoMapper.selectPage(page, wrapper);
+    }
+
+    @Override
     public ClassInfo getClassById(Long id) {
         ClassInfo classInfo = classInfoMapper.selectById(id);
         if (classInfo == null) {

@@ -1,0 +1,92 @@
+<mxfile host="app.diagrams.net" agent="drawio-skill-cli">
+  <diagram name="Page-1" id="0">
+    <mxGraphModel dx="1941" dy="702" grid="1" gridSize="8" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="544" pageHeight="880" background="#FFFFFF" math="1" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" parent="1" style="rounded=1;arcSize=50;html=1;whiteSpace=wrap;fillColor=#E5E5E5;strokeColor=#1E1E1E;strokeWidth=1;fontColor=#1E1E1E;fontSize=11;fontFamily=Times New Roman, Georgia, serif;verticalAlign=middle;align=center" value="开始" vertex="1">
+          <mxGeometry height="40" width="80" x="280" y="98" as="geometry" />
+        </mxCell>
+        <mxCell id="rMUprVSME5-ufebxrOX9-26" edge="1" parent="1" source="3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;startArrow=classic;startFill=1;" target="2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="3" parent="1" style="rounded=1;arcSize=20;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#1E1E1E;strokeWidth=1;fontColor=#1E1E1E;fontSize=11;fontFamily=Times New Roman, Georgia, serif;verticalAlign=middle;align=center" value="获取儿童基本信息&lt;div&gt;(年龄、阅读类型、兴趣标签)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="120" y="88" as="geometry" />
+        </mxCell>
+        <mxCell id="4" parent="1" style="rounded=1;arcSize=20;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#1E1E1E;strokeWidth=1;fontColor=#1E1E1E;fontSize=11;fontFamily=Times New Roman, Georgia, serif;verticalAlign=middle;align=center" value="多策略并行计算" vertex="1">
+          <mxGeometry height="60" width="120" x="120" y="192" as="geometry" />
+        </mxCell>
+        <mxCell id="5" parent="1" style="rounded=1;arcSize=20;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#1E1E1E;strokeWidth=1;fontColor=#1E1E1E;fontSize=11;fontFamily=Times New Roman, Georgia, serif;verticalAlign=middle;align=center" value="内容推荐&lt;div&gt;基于兴趣标签匹配&lt;/div&gt;&lt;div&gt;绘本特征向量&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="-16" y="312" as="geometry" />
+        </mxCell>
+        <mxCell id="6" parent="1" style="rounded=1;arcSize=20;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#1E1E1E;strokeWidth=1;fontColor=#1E1E1E;fontSize=11;fontFamily=Times New Roman, Georgia, serif;verticalAlign=middle;align=center" value="协同过滤&lt;div&gt;基于同龄儿童&lt;/div&gt;&lt;div&gt;阅读行为相似度&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="104" y="312" as="geometry" />
+        </mxCell>
+        <mxCell id="7" parent="1" style="rounded=1;arcSize=20;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#1E1E1E;strokeWidth=1;fontColor=#1E1E1E;fontSize=11;fontFamily=Times New Roman, Georgia, serif;verticalAlign=middle;align=center" value="年龄推荐&lt;div&gt;基于年龄段&lt;/div&gt;&lt;div&gt;匹配适读绘本&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="224" y="312" as="geometry" />
+        </mxCell>
+        <mxCell id="8" parent="1" style="rounded=1;arcSize=20;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#1E1E1E;strokeWidth=1;fontColor=#1E1E1E;fontSize=11;fontFamily=Times New Roman, Georgia, serif;verticalAlign=middle;align=center" value="难度匹配&lt;div&gt;基于阅读能力&lt;/div&gt;&lt;div&gt;匹配合适难度&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="344" y="312" as="geometry" />
+        </mxCell>
+        <mxCell id="9" parent="1" style="rounded=1;arcSize=20;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#1E1E1E;strokeWidth=1;fontColor=#1E1E1E;fontSize=11;fontFamily=Times New Roman, Georgia, serif;verticalAlign=middle;align=center" value="加权融合各策略得分&lt;div&gt;计算综合推荐评分&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="120" y="448" as="geometry" />
+        </mxCell>
+        <mxCell id="10" parent="1" style="rounded=1;arcSize=20;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#1E1E1E;strokeWidth=1;fontColor=#1E1E1E;fontSize=11;fontFamily=Times New Roman, Georgia, serif;verticalAlign=middle;align=center" value="按评分排序&lt;div&gt;筛选Top-N绘本&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="120" y="552" as="geometry" />
+        </mxCell>
+        <mxCell id="11" parent="1" style="rounded=1;arcSize=20;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#1E1E1E;strokeWidth=1;fontColor=#1E1E1E;fontSize=11;fontFamily=Times New Roman, Georgia, serif;verticalAlign=middle;align=center" value="生成个性化推荐列表" vertex="1">
+          <mxGeometry height="60" width="120" x="120" y="648" as="geometry" />
+        </mxCell>
+        <mxCell id="12" parent="1" style="rounded=1;arcSize=50;html=1;whiteSpace=wrap;fillColor=#E5E5E5;strokeColor=#1E1E1E;strokeWidth=1;fontColor=#1E1E1E;fontSize=11;fontFamily=Times New Roman, Georgia, serif;verticalAlign=middle;align=center" value="结束" vertex="1">
+          <mxGeometry height="40" width="80" x="288" y="562" as="geometry" />
+        </mxCell>
+        <mxCell id="14" edge="1" parent="1" source="3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1E1E1E;strokeWidth=1.5;endArrow=block;endFill=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8" target="4" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="15" edge="1" parent="1" source="4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1E1E1E;strokeWidth=1.5;endArrow=block;endFill=1;exitX=0;exitY=0.25;exitDx=0;exitDy=0;jumpStyle=arc;jumpSize=8" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-40" y="207" />
+              <mxPoint x="-40" y="327" />
+              <mxPoint x="-16" y="327" />
+            </Array>
+            <mxPoint x="-16" y="327" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="16" edge="1" parent="1" source="4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1E1E1E;strokeWidth=1.5;endArrow=block;endFill=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.391;entryY=0.002;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;entryPerimeter=0;" target="6" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="17" edge="1" parent="1" source="4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1E1E1E;strokeWidth=1.5;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8" target="7" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="18" edge="1" parent="1" source="4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1E1E1E;strokeWidth=1.5;endArrow=block;endFill=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8" target="8" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="19" edge="1" parent="1" source="5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1E1E1E;strokeWidth=1.5;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8" target="9" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="20" edge="1" parent="1" source="6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1E1E1E;strokeWidth=1.5;endArrow=block;endFill=1;exitX=0.385;exitY=0.967;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8;exitPerimeter=0;" target="9" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="21" edge="1" parent="1" source="7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1E1E1E;strokeWidth=1.5;endArrow=block;endFill=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8" target="9" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="22" edge="1" parent="1" source="8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1E1E1E;strokeWidth=1.5;endArrow=block;endFill=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8" target="9" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="23" edge="1" parent="1" source="9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1E1E1E;strokeWidth=1.5;endArrow=block;endFill=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8" target="10" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="24" edge="1" parent="1" source="10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1E1E1E;strokeWidth=1.5;endArrow=block;endFill=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;jumpStyle=arc;jumpSize=8" target="11" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rMUprVSME5-ufebxrOX9-25" edge="1" parent="1" source="11" style="edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;jettySize=auto;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=1.01;exitY=0.44;exitDx=0;exitDy=0;exitPerimeter=0;" target="12" value="">
+          <mxGeometry relative="1" width="100" as="geometry">
+            <mxPoint x="104" y="712" as="sourcePoint" />
+            <mxPoint x="204" y="712" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

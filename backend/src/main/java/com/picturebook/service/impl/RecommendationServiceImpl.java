@@ -66,7 +66,9 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     @Override
     public List<Book> getHotBooks(int limit) {
-        return bookMapper.selectHotBooks(limit);
+        List<Book> books = bookMapper.selectHotBooks(limit * 3);
+        Collections.shuffle(books);
+        return books.subList(0, Math.min(limit, books.size()));
     }
 
     @Override
@@ -312,8 +314,10 @@ public class RecommendationServiceImpl implements RecommendationService {
                         new LambdaQueryWrapper<Book>()
                                 .eq(Book::getStatus, 1)
                                 .eq(Book::getCategory, tag.trim())
-                                .last("LIMIT 10")
+                                .last("LIMIT 30")
                 );
+                Collections.shuffle(matchedBooks);
+                matchedBooks = matchedBooks.subList(0, Math.min(10, matchedBooks.size()));
                 for (Book book : matchedBooks) {
                     if (!readBookIds.contains(book.getId())) {
                         bookScores.merge(book.getId(), 30.0, Double::sum);
@@ -331,8 +335,10 @@ public class RecommendationServiceImpl implements RecommendationService {
                     new LambdaQueryWrapper<Book>()
                             .eq(Book::getStatus, 1)
                             .eq(Book::getAgeRange, ageRange)
-                            .last("LIMIT 10")
+                            .last("LIMIT 30")
             );
+            Collections.shuffle(ageBooks);
+            ageBooks = ageBooks.subList(0, Math.min(10, ageBooks.size()));
             for (Book book : ageBooks) {
                 if (!readBookIds.contains(book.getId())) {
                     bookScores.merge(book.getId(), 25.0, Double::sum);
@@ -350,8 +356,10 @@ public class RecommendationServiceImpl implements RecommendationService {
                     new LambdaQueryWrapper<Book>()
                             .eq(Book::getStatus, 1)
                             .eq(Book::getDifficultyLevel, diffLevel)
-                            .last("LIMIT 10")
+                            .last("LIMIT 30")
             );
+            Collections.shuffle(abilityBooks);
+            abilityBooks = abilityBooks.subList(0, Math.min(10, abilityBooks.size()));
             for (Book book : abilityBooks) {
                 if (!readBookIds.contains(book.getId())) {
                     bookScores.merge(book.getId(), 25.0, Double::sum);
@@ -393,8 +401,6 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     @Override
     public List<Book> getDifficultyMatchedRecommendations(Long childId, int limit) {
-        List<Book> result = new ArrayList<>();
-
         BehaviorAnalysis analysis = behaviorAnalysisMapper.selectLatestByChildId(childId);
         int difficultyLevel = 1;
 
@@ -416,17 +422,13 @@ public class RecommendationServiceImpl implements RecommendationService {
                 new LambdaQueryWrapper<Book>()
                         .eq(Book::getStatus, 1)
                         .eq(Book::getDifficultyLevel, difficultyLevel)
-                        .orderByDesc(Book::getReadCount)
-                        .last("LIMIT " + limit)
         );
 
-        for (Book book : books) {
-            if (!readBookIds.contains(book.getId())) {
-                result.add(book);
-            }
-        }
-
-        return result;
+        List<Book> filtered = books.stream()
+                .filter(b -> !readBookIds.contains(b.getId()))
+                .collect(Collectors.toList());
+        Collections.shuffle(filtered);
+        return filtered.subList(0, Math.min(limit, filtered.size()));
     }
 
     @Override
@@ -447,13 +449,13 @@ public class RecommendationServiceImpl implements RecommendationService {
                 new LambdaQueryWrapper<Book>()
                         .eq(Book::getStatus, 1)
                         .eq(Book::getAgeRange, ageRange)
-                        .orderByDesc(Book::getReadCount)
-                        .last("LIMIT " + limit)
         );
 
-        return books.stream()
+        List<Book> filtered = books.stream()
                 .filter(b -> !readBookIds.contains(b.getId()))
                 .collect(Collectors.toList());
+        Collections.shuffle(filtered);
+        return filtered.subList(0, Math.min(limit, filtered.size()));
     }
 
     @Override

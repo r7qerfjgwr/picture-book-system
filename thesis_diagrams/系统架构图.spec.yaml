@@ -1,0 +1,205 @@
+meta:
+  profile: academic-paper
+  figureType: architecture
+  theme: tech-blue
+  layout: horizontal
+  title: 系统架构图
+  description: 四层架构：表现层、业务逻辑层、数据访问层、数据存储层
+modules:
+  - id: presentation
+    label: 表现层
+  - id: business
+    label: 业务逻辑层
+  - id: data
+    label: 数据访问层
+  - id: storage
+    label: 数据存储层
+nodes:
+  - id: presentation_layer
+    label: 表现层 (Presentation Layer)
+    type: service
+    module: presentation
+    position:
+      x: 60
+      'y': 40
+  - id: vue
+    label: Vue 3
+    type: service
+    module: presentation
+    position:
+      x: 60
+      'y': 120
+  - id: element
+    label: Element Plus
+    type: service
+    module: presentation
+    position:
+      x: 160
+      'y': 120
+  - id: echarts
+    label: ECharts
+    type: service
+    module: presentation
+    position:
+      x: 260
+      'y': 120
+  - id: axios
+    label: Axios
+    type: service
+    module: presentation
+    position:
+      x: 360
+      'y': 120
+  - id: pinia
+    label: Pinia
+    type: service
+    module: presentation
+    position:
+      x: 460
+      'y': 120
+  - id: business_layer
+    label: 业务逻辑层 (Business Logic Layer)
+    type: service
+    module: business
+    position:
+      x: 60
+      'y': 240
+  - id: controller
+    label: Controller
+    type: service
+    module: business
+    position:
+      x: 60
+      'y': 320
+  - id: service
+    label: Service
+    type: service
+    module: business
+    position:
+      x: 180
+      'y': 320
+  - id: security
+    label: Security
+    type: service
+    module: business
+    position:
+      x: 300
+      'y': 320
+  - id: task
+    label: Task
+    type: service
+    module: business
+    position:
+      x: 420
+      'y': 320
+  - id: springboot
+    label: Spring Boot 3 + Java 17
+    type: service
+    module: business
+    position:
+      x: 480
+      'y': 240
+  - id: data_layer
+    label: 数据访问层 (Data Access Layer)
+    type: service
+    module: data
+    position:
+      x: 60
+      'y': 440
+  - id: user_mapper
+    label: UserMapper
+    type: database
+    module: data
+    position:
+      x: 60
+      'y': 520
+  - id: book_mapper
+    label: BookMapper
+    type: database
+    module: data
+    position:
+      x: 160
+      'y': 520
+  - id: child_mapper
+    label: ChildMapper
+    type: database
+    module: data
+    position:
+      x: 260
+      'y': 520
+  - id: log_mapper
+    label: ReadingLogMapper
+    type: database
+    module: data
+    position:
+      x: 360
+      'y': 520
+  - id: other_mapper
+    label: ...
+    type: database
+    module: data
+    position:
+      x: 480
+      'y': 520
+  - id: storage_layer
+    label: 数据存储层 - MySQL 8.0
+    type: database
+    module: storage
+    position:
+      x: 180
+      'y': 640
+edges:
+  - from: presentation_layer
+    to: business_layer
+    type: primary
+    label: HTTP/JSON
+  - from: business_layer
+    to: data_layer
+    type: primary
+    label: MyBatis-Plus
+  - from: data_layer
+    to: storage_layer
+    type: primary
+    label: JDBC
+  - from: presentation_layer
+    to: vue
+    type: data
+  - from: presentation_layer
+    to: element
+    type: data
+  - from: presentation_layer
+    to: echarts
+    type: data
+  - from: presentation_layer
+    to: axios
+    type: data
+  - from: presentation_layer
+    to: pinia
+    type: data
+  - from: business_layer
+    to: controller
+    type: data
+  - from: business_layer
+    to: service
+    type: data
+  - from: business_layer
+    to: security
+    type: data
+  - from: business_layer
+    to: task
+    type: data
+  - from: data_layer
+    to: user_mapper
+    type: data
+  - from: data_layer
+    to: book_mapper
+    type: data
+  - from: data_layer
+    to: child_mapper
+    type: data
+  - from: data_layer
+    to: log_mapper
+    type: data
+  - from: data_layer
+    to: other_mapper
+    type: data
